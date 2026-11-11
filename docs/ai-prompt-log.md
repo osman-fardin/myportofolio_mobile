@@ -86,3 +86,121 @@ identitas dari README Django, teknologi, setup, struktur, pengujian, progres,
 serta disclosure singkat. Detail eksperimen dan kendala tooling tetap tersedia
 pada entri pertama. Perubahan ini hanya dokumentasi; kode aplikasi tidak
 diubah dan test runtime tidak diulang.
+
+## 3. Memisahkan bootstrap dan halaman utama
+
+**Tanggal:** 11 November 2026.
+
+**Prompt (ringkasan):**
+
+> Jelaskan pemisahan bootstrap aplikasi dan halaman utama, penggunaan
+> StatelessWidget untuk halaman tanpa state lokal, serta konfigurasi tema
+> Material 3. Bantu menerapkannya secara bertahap dan menyesuaikan widget test.
+
+**Hasil penggunaan:**
+
+Commit bootstrap 3d432c5 dan working tree bersih diperiksa sebelum lanjut.
+Dengan bantuan AI, dibuat branch fitur, main.dart
+diringkas menjadi entry point/MyApp/tema, dan MyHomePage dipindahkan ke
+menu.dart sebagai StatelessWidget. Counter, State, setState, serta tombol
+increment dihapus. Tema menggunakan ColorScheme.fromSeed indigo dengan
+secondary amber[700] dan Material 3 sesuai materi. Konstruktor const tetap
+dipakai karena konfigurasi halaman saat ini tetap. Tampilan hanya judul
+MyPortfolio dan sapaan Halo dari MyPortfolio!, belum kartu atau aksi menu.
+
+AI membantu mengedit kode, test, serta dokumentasi dan memeriksa dokumentasi
+resmi StatelessWidget/ColorScheme.fromSeed. Test counter diganti dengan test
+judul/sapaan halaman, tidak adanya FloatingActionButton, dan tidak ada exception
+saat render. Flutter analyze bersih, satu widget test lulus, format check nol
+perubahan, dan diff check bersih. Browser tidak diulang pada checkpoint ini;
+bukti Chrome counter pada entri pertama tetap bukti historis. Dependency dan
+konfigurasi platform tidak berubah. Commit masih aku jalankan sendiri.
+
+Nama branch kemudian disesuaikan menjadi `feat/tutorial-8-basic-flutter`
+mengikuti pola branch proyek sebelumnya, sesuai permintaan saya. Commit
+pemisahan halaman `679e844` tetap dipertahankan.
+
+## 4. Menyusun kartu informasi dengan widget yang dapat digunakan kembali
+
+**Tanggal:** 11 November 2026.
+
+**Prompt (ringkasan):**
+
+> Jelaskan penggunaan parameter title dan content untuk membuat InfoCard yang
+> dapat digunakan kembali. Bantu menyusun tiga kartu identitas dengan Row dan
+> Column, menyesuaikan layout terhadap ruang layar, serta menguji isi kartu
+> dan keterbacaan pada ukuran layar dan skala teks yang berbeda.
+
+**Hasil penggunaan:**
+
+Dengan bantuan AI, InfoCard ditambahkan pada menu.dart sebagai StatelessWidget
+dengan dua parameter wajib untuk menampilkan NPM, nama, dan kelas, serta pesan
+sambutan pada halaman utama. Main.dart, dependency, dan platform tidak diubah.
+Branch aktif feat/tutorial-8-basic-flutter; catatan pergantian
+nama branch yang masih lokal tetap dipertahankan.
+
+Row memakai Expanded untuk membagi lebar yang tersedia setelah padding,
+menggantikan perhitungan lebar layar/3.5 pada contoh. SingleChildScrollView
+memungkinkan konten digulir saat layar pendek atau teks diperbesar. Browser
+menemukan NPM membungkus ke baris kedua; padding horizontal kartu kemudian
+dikurangi hingga angka utuh pada lebar 320 px, tanpa mengecilkan font. Padding
+vertikal 16 dan elevation 2 tetap dipakai.
+
+Enam widget test memeriksa isi kartu beserta labelnya, penggunaan InfoCard
+dengan data berbeda, serta layout 320x568, 390x844, 1280x720, dan 320x240 dengan
+teks 200%. Percobaan test awal mengharuskan seluruh sapaan panjang muat pada
+layar pendek sekaligus. Asumsi ini dikoreksi: awal teks dapat dijangkau, lalu
+akhir teks bisa dicapai lewat scroll, tanpa exception atau overflow horizontal.
+Seluruh enam test, analyze, format, dan diff check lulus setelah perubahan.
+
+AI membantu edit, pengujian, dokumentasi, dan pengecekan Chrome melalui Flutter
+web-server lokal pada lebar 320/390/1280. Screenshot diperiksa; console yang
+diperiksa tidak memuat error/warning. Semantics Flutter diaktifkan untuk
+pemeriksaan UI. Server/sesi QA dihentikan, artefak disimpan di /tmp. README
+diperbarui secara ringkas. Commit tetap aku jalankan sendiri; menu aksi dan
+SnackBar belum dibuat pada checkpoint ini.
+
+## 5. Menyusun menu aksi dan umpan balik SnackBar
+
+**Tanggal:** 11 November 2026.
+
+**Prompt (ringkasan):**
+
+> Jelaskan pemisahan model ItemHomepage dan widget ItemCard, penggunaan
+> Material/InkWell untuk interaksi, serta ScaffoldMessenger untuk SnackBar.
+> Bantu menyusun tiga menu dalam GridView, menjaga layout saat teks diperbesar,
+> dan menguji pesan, tap berulang, serta akses keyboard.
+
+**Hasil penggunaan:**
+
+Commit InfoCard f8a7b9e dan working tree bersih diperiksa sebelum lanjut. Dengan
+bantuan AI, ItemHomepage menyimpan nama/ikon dan ItemCard merender Material,
+InkWell, serta semantics tombol. Tiga item Lihat Proyek, Tambah Proyek, Logout
+ditampilkan melalui GridView.count tiga kolom. Daftar konstanta dan konstruktor
+const mempertahankan MyHomePage sebagai StatelessWidget.
+
+Grid memakai shrinkWrap dan tidak menggulir sendiri karena halaman sudah
+memiliki SingleChildScrollView. Tinggi kartu mengikuti skala teks supaya ikon
+serta label tidak overflow. AppBar memakai warna primary/onPrimary. Kartu
+memakai secondary amber dengan onSecondary hitam untuk keterbacaan; ini
+penyesuaian terhadap ikon/teks putih pada contoh, tanpa mengganti warna dasar.
+
+ScaffoldMessenger menampilkan pesan sesuai nama kartu. clearSnackBars dipakai
+sebelum showSnackBar untuk menghapus antrean pesan lama, melanjutkan tujuan
+hideCurrentSnackBar pada contoh saat pengguna menekan beberapa kartu cepat.
+Ketiga tombol baru memberi feedback, belum menjalankan navigasi/API/autentikasi.
+
+AI membantu edit kode/test/docs dan memeriksa dokumentasi resmi Flutter.
+Sebelas test lulus: dua test profil/InfoCard, empat viewport termasuk teks
+200%, tiga aksi, penggantian pesan tanpa antrean tersisa, dan aktivasi keyboard.
+Test layout diperbarui untuk menjangkau menu terakhir setelah konten bertambah.
+Analyze, format, dan diff check bersih; dependency/platform tidak berubah.
+
+Chrome diuji lewat server QA terpisah pada port 8769, tanpa menghentikan sesi
+Flutter lain. Ketiga pesan terbukti pada 320/390/1280 dan URL tetap sama;
+screenshot diperiksa, console yang diperiksa tanpa error/warning. Locator pesan
+awal cocok dengan live announcement dan teks visual sekaligus, sehingga
+pemeriksaan disesuaikan ke teks visual; tidak ada perubahan aplikasi untuk
+masalah locator ini. Server/sesi QA dihentikan, artefak di /tmp. README
+diperbarui ringkas dan commit tetap saya jalankan sendiri. Review akhir,
+repo publik, push/merge, serta pengumpulan masih belum diverifikasi.
