@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:myportofolio_mobile/main.dart';
 import 'package:myportofolio_mobile/menu.dart';
@@ -53,7 +54,7 @@ void main() {
     (size: const Size(320, 240), scale: 2.0),
   ]) {
     testWidgets(
-      'Profile remains readable at ${viewport.size}, scale ${viewport.scale}',
+      'Profile and actions remain readable at ${viewport.size}, scale ${viewport.scale}',
       (WidgetTester tester) async {
         tester.view.devicePixelRatio = 1;
         tester.view.physicalSize = viewport.size;
@@ -66,21 +67,76 @@ void main() {
         final welcome = find.text('Selamat datang di MyPortfolio Mobile!');
         await tester.ensureVisible(welcome);
         await tester.pumpAndSettle();
-        expect(tester.getRect(welcome).top, greaterThanOrEqualTo(0));
-
-        await tester.drag(
-          find.byType(SingleChildScrollView),
-          const Offset(0, -1000),
-        );
-        await tester.pumpAndSettle();
-
         final bounds = tester.getRect(welcome);
         expect(bounds.left, greaterThanOrEqualTo(0));
         expect(bounds.right, lessThanOrEqualTo(viewport.size.width));
-        expect(bounds.bottom, lessThanOrEqualTo(viewport.size.height));
-        expect(bounds.bottom, greaterThan(0));
+        expect(bounds.top, greaterThanOrEqualTo(0));
+
+        final lastAction = find.text('Logout');
+        await tester.ensureVisible(lastAction);
+        await tester.pumpAndSettle();
+        final lastActionBounds = tester.getRect(lastAction);
+        expect(lastActionBounds.left, greaterThanOrEqualTo(0));
+        expect(lastActionBounds.right, lessThanOrEqualTo(viewport.size.width));
+        expect(lastActionBounds.top, greaterThanOrEqualTo(0));
+        expect(
+          lastActionBounds.bottom,
+          lessThanOrEqualTo(viewport.size.height),
+        );
         expect(tester.takeException(), isNull);
       },
     );
   }
+
+  for (final name in ['Lihat Proyek', 'Tambah Proyek', 'Logout']) {
+    testWidgets('$name displays its own SnackBar message', (tester) async {
+      await tester.pumpWidget(const MyApp());
+
+      final card = find.widgetWithText(ItemCard, name);
+      expect(card, findsOneWidget);
+      await tester.tap(card);
+      await tester.pumpAndSettle();
+
+      expect(find.text('Kamu telah menekan tombol $name!'), findsOneWidget);
+      expect(find.text('MyPortfolio'), findsOneWidget);
+      expect(tester.takeException(), isNull);
+    });
+  }
+
+  testWidgets('Rapid taps replace earlier messages without leaving a queue', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MyApp());
+
+    await tester.tap(find.text('Lihat Proyek'));
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.tap(find.text('Tambah Proyek'));
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.tap(find.text('Logout'));
+    await tester.pumpAndSettle();
+
+    expect(find.text('Kamu telah menekan tombol Logout!'), findsOneWidget);
+    expect(find.text('Kamu telah menekan tombol Lihat Proyek!'), findsNothing);
+    expect(find.text('Kamu telah menekan tombol Tambah Proyek!'), findsNothing);
+    expect(find.byType(SnackBar), findsOneWidget);
+
+    await tester.pump(const Duration(seconds: 5));
+    await tester.pumpAndSettle();
+    expect(find.byType(SnackBar), findsNothing);
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('Keyboard users can activate the first action', (tester) async {
+    await tester.pumpWidget(const MyApp());
+
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.sendKeyEvent(LogicalKeyboardKey.enter);
+    await tester.pumpAndSettle();
+
+    expect(
+      find.text('Kamu telah menekan tombol Lihat Proyek!'),
+      findsOneWidget,
+    );
+    expect(tester.takeException(), isNull);
+  });
 }

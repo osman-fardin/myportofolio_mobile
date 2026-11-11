@@ -159,3 +159,48 @@ diperiksa tidak memuat error/warning. Semantics Flutter diaktifkan untuk
 pemeriksaan UI. Server/sesi QA dihentikan, artefak disimpan di /tmp. README
 diperbarui secara ringkas. Commit tetap aku jalankan sendiri; menu aksi dan
 SnackBar belum dibuat pada checkpoint ini.
+
+## 5. Menyusun menu aksi dan umpan balik SnackBar
+
+**Tanggal:** 11 November 2026.
+
+**Prompt (ringkasan):**
+
+> Jelaskan pemisahan model ItemHomepage dan widget ItemCard, penggunaan
+> Material/InkWell untuk interaksi, serta ScaffoldMessenger untuk SnackBar.
+> Bantu menyusun tiga menu dalam GridView, menjaga layout saat teks diperbesar,
+> dan menguji pesan, tap berulang, serta akses keyboard.
+
+**Hasil penggunaan:**
+
+Commit InfoCard f8a7b9e dan working tree bersih diperiksa sebelum lanjut. Dengan
+bantuan AI, ItemHomepage menyimpan nama/ikon dan ItemCard merender Material,
+InkWell, serta semantics tombol. Tiga item Lihat Proyek, Tambah Proyek, Logout
+ditampilkan melalui GridView.count tiga kolom. Daftar konstanta dan konstruktor
+const mempertahankan MyHomePage sebagai StatelessWidget.
+
+Grid memakai shrinkWrap dan tidak menggulir sendiri karena halaman sudah
+memiliki SingleChildScrollView. Tinggi kartu mengikuti skala teks supaya ikon
+serta label tidak overflow. AppBar memakai warna primary/onPrimary. Kartu
+memakai secondary amber dengan onSecondary hitam untuk keterbacaan; ini
+penyesuaian terhadap ikon/teks putih pada contoh, tanpa mengganti warna dasar.
+
+ScaffoldMessenger menampilkan pesan sesuai nama kartu. clearSnackBars dipakai
+sebelum showSnackBar untuk menghapus antrean pesan lama, melanjutkan tujuan
+hideCurrentSnackBar pada contoh saat pengguna menekan beberapa kartu cepat.
+Ketiga tombol baru memberi feedback, belum menjalankan navigasi/API/autentikasi.
+
+AI membantu edit kode/test/docs dan memeriksa dokumentasi resmi Flutter.
+Sebelas test lulus: dua test profil/InfoCard, empat viewport termasuk teks
+200%, tiga aksi, penggantian pesan tanpa antrean tersisa, dan aktivasi keyboard.
+Test layout diperbarui untuk menjangkau menu terakhir setelah konten bertambah.
+Analyze, format, dan diff check bersih; dependency/platform tidak berubah.
+
+Chrome diuji lewat server QA terpisah pada port 8769, tanpa menghentikan sesi
+Flutter lain. Ketiga pesan terbukti pada 320/390/1280 dan URL tetap sama;
+screenshot diperiksa, console yang diperiksa tanpa error/warning. Locator pesan
+awal cocok dengan live announcement dan teks visual sekaligus, sehingga
+pemeriksaan disesuaikan ke teks visual; tidak ada perubahan aplikasi untuk
+masalah locator ini. Server/sesi QA dihentikan, artefak di /tmp. README
+diperbarui ringkas dan commit tetap saya jalankan sendiri. Review akhir,
+repo publik, push/merge, serta pengumpulan masih belum diverifikasi.

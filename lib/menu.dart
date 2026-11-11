@@ -6,11 +6,26 @@ class MyHomePage extends StatelessWidget {
   final String npm = '2506541723';
   final String nama = 'Muhammad Osman Fardin';
   final String kelas = 'PBP D';
+  final List<ItemHomepage> items = const [
+    ItemHomepage('Lihat Proyek', Icons.folder),
+    ItemHomepage('Tambah Proyek', Icons.add_circle),
+    ItemHomepage('Logout', Icons.logout),
+  ];
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final textScale = MediaQuery.textScalerOf(context).scale(14) / 14;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('MyPortfolio')),
+      appBar: AppBar(
+        title: const Text(
+          'MyPortfolio',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
+      ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -35,7 +50,76 @@ class MyHomePage extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
             ),
+            GridView.count(
+              primary: false,
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: const EdgeInsets.all(20),
+              crossAxisCount: 3,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
+              mainAxisExtent: 140 * textScale,
+              children: items.map((item) => ItemCard(item)).toList(),
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ItemHomepage {
+  const ItemHomepage(this.name, this.icon);
+
+  final String name;
+  final IconData icon;
+}
+
+class ItemCard extends StatelessWidget {
+  const ItemCard(this.item, {super.key});
+
+  final ItemHomepage item;
+
+  @override
+  Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final borderRadius = BorderRadius.circular(12);
+
+    return Semantics(
+      button: true,
+      child: Material(
+        color: colorScheme.secondary,
+        borderRadius: borderRadius,
+        child: InkWell(
+          borderRadius: borderRadius,
+          onTap: () {
+            ScaffoldMessenger.of(context)
+              ..clearSnackBars()
+              ..showSnackBar(
+                SnackBar(
+                  content: Text('Kamu telah menekan tombol ${item.name}!'),
+                ),
+              );
+          },
+          child: Padding(
+            padding: const EdgeInsets.all(8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(item.icon, color: colorScheme.onSecondary, size: 30),
+                const SizedBox(height: 6),
+                Text(
+                  item.name,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: colorScheme.onSecondary,
+                    fontSize: 14,
+                    height: 1.2,
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );
