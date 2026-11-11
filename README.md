@@ -33,7 +33,8 @@ flutter run -d chrome
 
 ## Project Structure
 
-- `lib/main.dart`: titik masuk dan antarmuka aplikasi.
+- `lib/main.dart`: titik masuk, konfigurasi tema, dan halaman awal aplikasi.
+- `lib/menu.dart`: halaman utama berbasis StatelessWidget.
 - `test/`: pengujian widget.
 - `pubspec.yaml`: konfigurasi proyek dan dependency.
 - `pubspec.lock`: versi dependency yang digunakan.
@@ -50,15 +51,19 @@ dart format --output=none --set-exit-if-changed lib test
 Verifikasi awal: analisis statis dan format bersih, satu widget test lulus,
 serta counter berhasil bertambah dari 0 menjadi 1 di Chrome.
 
+Setelah pemisahan halaman, analisis statis dan format tetap bersih. Satu widget
+test halaman utama lulus, menggantikan test counter yang sudah dihapus.
+
 ## Development Progress
 
-Tahap awal mencakup inisialisasi proyek dan verifikasi aplikasi counter bawaan.
-Pengembangan berikutnya mencakup halaman utama, kartu identitas, dan menu aksi
-sesuai materi Tutorial 08. Integrasi API belum diterapkan. Pengujian saat ini
-menggunakan Chrome; build Android, iOS, dan desktop belum diverifikasi.
+Proyek telah diinisialisasi pada commit `3d432c5`. Halaman utama dipisahkan ke
+menu.dart sebagai StatelessWidget, dengan tema Material 3 berbasis indigo/amber.
+Pengembangan berikutnya mencakup kartu identitas dan menu aksi sesuai materi
+Tutorial 08. Integrasi API belum diterapkan. Chrome telah diuji pada tahap awal;
+build Android, iOS, dan desktop belum diverifikasi.
 
 ## AI Disclosure
 
 Saya menggunakan Codex untuk membantu penjelasan konsep, penyiapan proyek,
-penyuntingan dokumentasi, dan verifikasi kode serta interaksi aplikasi.
+penyuntingan kode dan dokumentasi, serta pengujian aplikasi.
 Rincian bantuan dicatat pada [AI prompt log](docs/ai-prompt-log.md).

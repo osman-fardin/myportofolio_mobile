@@ -86,3 +86,32 @@ identitas dari README Django, teknologi, setup, struktur, pengujian, progres,
 serta disclosure singkat. Detail eksperimen dan kendala tooling tetap tersedia
 pada entri pertama. Perubahan ini hanya dokumentasi; kode aplikasi tidak
 diubah dan test runtime tidak diulang.
+
+## 3. Memisahkan bootstrap dan halaman utama
+
+**Tanggal:** 11 November 2026.
+
+**Prompt (ringkasan):**
+
+> Jelaskan pemisahan bootstrap aplikasi dan halaman utama, penggunaan
+> StatelessWidget untuk halaman tanpa state lokal, serta konfigurasi tema
+> Material 3. Bantu menerapkannya secara bertahap dan menyesuaikan widget test.
+
+**Hasil penggunaan:**
+
+Commit bootstrap 3d432c5 dan working tree bersih diperiksa sebelum lanjut.
+Dengan bantuan AI, dibuat branch codex/tutorial-8-basic-flutter, main.dart
+diringkas menjadi entry point/MyApp/tema, dan MyHomePage dipindahkan ke
+menu.dart sebagai StatelessWidget. Counter, State, setState, serta tombol
+increment dihapus. Tema menggunakan ColorScheme.fromSeed indigo dengan
+secondary amber[700] dan Material 3 sesuai materi. Konstruktor const tetap
+dipakai karena konfigurasi halaman saat ini tetap. Tampilan hanya judul
+MyPortfolio dan sapaan Halo dari MyPortfolio!, belum kartu atau aksi menu.
+
+AI membantu mengedit kode, test, serta dokumentasi dan memeriksa dokumentasi
+resmi StatelessWidget/ColorScheme.fromSeed. Test counter diganti dengan test
+judul/sapaan halaman, tidak adanya FloatingActionButton, dan tidak ada exception
+saat render. Flutter analyze bersih, satu widget test lulus, format check nol
+perubahan, dan diff check bersih. Browser tidak diulang pada checkpoint ini;
+bukti Chrome counter pada entri pertama tetap bukti historis. Dependency dan
+konfigurasi platform tidak berubah. Commit masih aku jalankan sendiri.
