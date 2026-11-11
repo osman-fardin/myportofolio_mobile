@@ -100,7 +100,7 @@ diubah dan test runtime tidak diulang.
 **Hasil penggunaan:**
 
 Commit bootstrap 3d432c5 dan working tree bersih diperiksa sebelum lanjut.
-Dengan bantuan AI, dibuat branch codex/tutorial-8-basic-flutter, main.dart
+Dengan bantuan AI, dibuat branch fitur, main.dart
 diringkas menjadi entry point/MyApp/tema, dan MyHomePage dipindahkan ke
 menu.dart sebagai StatelessWidget. Counter, State, setState, serta tombol
 increment dihapus. Tema menggunakan ColorScheme.fromSeed indigo dengan
@@ -115,3 +115,47 @@ saat render. Flutter analyze bersih, satu widget test lulus, format check nol
 perubahan, dan diff check bersih. Browser tidak diulang pada checkpoint ini;
 bukti Chrome counter pada entri pertama tetap bukti historis. Dependency dan
 konfigurasi platform tidak berubah. Commit masih aku jalankan sendiri.
+
+Nama branch kemudian disesuaikan menjadi `feat/tutorial-8-basic-flutter`
+mengikuti pola branch proyek sebelumnya, sesuai permintaan saya. Commit
+pemisahan halaman `679e844` tetap dipertahankan.
+
+## 4. Menyusun kartu informasi dengan widget yang dapat digunakan kembali
+
+**Tanggal:** 11 November 2026.
+
+**Prompt (ringkasan):**
+
+> Jelaskan penggunaan parameter title dan content untuk membuat InfoCard yang
+> dapat digunakan kembali. Bantu menyusun tiga kartu identitas dengan Row dan
+> Column, menyesuaikan layout terhadap ruang layar, serta menguji isi kartu
+> dan keterbacaan pada ukuran layar dan skala teks yang berbeda.
+
+**Hasil penggunaan:**
+
+Dengan bantuan AI, InfoCard ditambahkan pada menu.dart sebagai StatelessWidget
+dengan dua parameter wajib untuk menampilkan NPM, nama, dan kelas, serta pesan
+sambutan pada halaman utama. Main.dart, dependency, dan platform tidak diubah.
+Branch aktif feat/tutorial-8-basic-flutter; catatan pergantian
+nama branch yang masih lokal tetap dipertahankan.
+
+Row memakai Expanded untuk membagi lebar yang tersedia setelah padding,
+menggantikan perhitungan lebar layar/3.5 pada contoh. SingleChildScrollView
+memungkinkan konten digulir saat layar pendek atau teks diperbesar. Browser
+menemukan NPM membungkus ke baris kedua; padding horizontal kartu kemudian
+dikurangi hingga angka utuh pada lebar 320 px, tanpa mengecilkan font. Padding
+vertikal 16 dan elevation 2 tetap dipakai.
+
+Enam widget test memeriksa isi kartu beserta labelnya, penggunaan InfoCard
+dengan data berbeda, serta layout 320x568, 390x844, 1280x720, dan 320x240 dengan
+teks 200%. Percobaan test awal mengharuskan seluruh sapaan panjang muat pada
+layar pendek sekaligus. Asumsi ini dikoreksi: awal teks dapat dijangkau, lalu
+akhir teks bisa dicapai lewat scroll, tanpa exception atau overflow horizontal.
+Seluruh enam test, analyze, format, dan diff check lulus setelah perubahan.
+
+AI membantu edit, pengujian, dokumentasi, dan pengecekan Chrome melalui Flutter
+web-server lokal pada lebar 320/390/1280. Screenshot diperiksa; console yang
+diperiksa tidak memuat error/warning. Semantics Flutter diaktifkan untuk
+pemeriksaan UI. Server/sesi QA dihentikan, artefak disimpan di /tmp. README
+diperbarui secara ringkas. Commit tetap aku jalankan sendiri; menu aksi dan
+SnackBar belum dibuat pada checkpoint ini.

@@ -34,7 +34,7 @@ flutter run -d chrome
 ## Project Structure
 
 - `lib/main.dart`: titik masuk, konfigurasi tema, dan halaman awal aplikasi.
-- `lib/menu.dart`: halaman utama berbasis StatelessWidget.
+- `lib/menu.dart`: halaman utama dan komponen kartu informasi InfoCard.
 - `test/`: pengujian widget.
 - `pubspec.yaml`: konfigurasi proyek dan dependency.
 - `pubspec.lock`: versi dependency yang digunakan.
@@ -51,16 +51,20 @@ dart format --output=none --set-exit-if-changed lib test
 Verifikasi awal: analisis statis dan format bersih, satu widget test lulus,
 serta counter berhasil bertambah dari 0 menjadi 1 di Chrome.
 
-Setelah pemisahan halaman, analisis statis dan format tetap bersih. Satu widget
-test halaman utama lulus, menggantikan test counter yang sudah dihapus.
+Setelah penambahan kartu informasi, enam widget test lulus: isi profil,
+penggunaan ulang InfoCard, serta layout pada layar kecil, desktop, dan teks 200%.
+Analisis statis dan format bersih. Tampilan Chrome diperiksa pada lebar 320,
+390, dan 1280 px; teks 200% diuji melalui widget test.
 
 ## Development Progress
 
 Proyek telah diinisialisasi pada commit `3d432c5`. Halaman utama dipisahkan ke
 menu.dart sebagai StatelessWidget, dengan tema Material 3 berbasis indigo/amber.
-Pengembangan berikutnya mencakup kartu identitas dan menu aksi sesuai materi
-Tutorial 08. Integrasi API belum diterapkan. Chrome telah diuji pada tahap awal;
-build Android, iOS, dan desktop belum diverifikasi.
+Halaman menampilkan tiga InfoCard (NPM, Name, Class) dan sambutan dengan
+identitas Muhammad Osman Fardin, NPM 2506541723, kelas PBP D. Struktur halaman
+mengikuti pola tutorial dengan data pemilik portofolio. Pengembangan berikutnya
+mencakup menu aksi. Integrasi API belum diterapkan; build Android, iOS, dan
+desktop belum diverifikasi.
 
 ## AI Disclosure
 
