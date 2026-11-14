@@ -6,10 +6,11 @@ class MyHomePage extends StatelessWidget {
   final String npm = '2506541723';
   final String nama = 'Muhammad Osman Fardin';
   final String kelas = 'PBP D';
+  // Palet mengikuti token navy, cloud, dan copper pada web portofolio.
   final List<ItemHomepage> items = const [
-    ItemHomepage('Lihat Proyek', Icons.folder),
-    ItemHomepage('Tambah Proyek', Icons.add_circle),
-    ItemHomepage('Logout', Icons.logout),
+    ItemHomepage('Lihat Proyek', Icons.folder, Color(0xFF23354D)),
+    ItemHomepage('Tambah Proyek', Icons.add_circle, Color(0xFF526F7A)),
+    ItemHomepage('Logout', Icons.logout, Color(0xFFB6643D)),
   ];
 
   @override
@@ -69,10 +70,20 @@ class MyHomePage extends StatelessWidget {
 }
 
 class ItemHomepage {
-  const ItemHomepage(this.name, this.icon);
+  const ItemHomepage(this.name, this.icon, this.color);
 
   final String name;
   final IconData icon;
+  final Color color;
+
+  /// Memilih teks hitam/putih dengan rasio kontras terbesar terhadap warna kartu.
+  /// Perhitungan memakai luminansi relatif dan rumus kontras WCAG.
+  Color get foregroundColor {
+    final luminance = color.computeLuminance();
+    final contrastWithBlack = (luminance + 0.05) / 0.05;
+    final contrastWithWhite = 1.05 / (luminance + 0.05);
+    return contrastWithBlack >= contrastWithWhite ? Colors.black : Colors.white;
+  }
 }
 
 class ItemCard extends StatelessWidget {
@@ -82,13 +93,13 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final foregroundColor = item.foregroundColor;
     final borderRadius = BorderRadius.circular(12);
 
     return Semantics(
       button: true,
       child: Material(
-        color: colorScheme.secondary,
+        color: item.color,
         borderRadius: borderRadius,
         child: InkWell(
           borderRadius: borderRadius,
@@ -106,13 +117,13 @@ class ItemCard extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(item.icon, color: colorScheme.onSecondary, size: 30),
+                Icon(item.icon, color: foregroundColor, size: 30),
                 const SizedBox(height: 6),
                 Text(
                   item.name,
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: colorScheme.onSecondary,
+                    color: foregroundColor,
                     fontSize: 14,
                     height: 1.2,
                   ),
