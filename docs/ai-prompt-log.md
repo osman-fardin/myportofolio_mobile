@@ -117,3 +117,20 @@ membaca ruang yang tersedia sehingga kartu bisa disusun vertikal di layar
 kecil dan sejajar di layar lebar. Pemisahan bagian intro, About, dan footer
 membantu menjaga halaman utama tetap mudah dibaca. Lisensi font ikut
 disertakan bersama aset Space Grotesk.
+
+## 8. Memahami pertanyaan reflektif Tugas 7
+
+**Prompt (ringkasan):**
+
+> Bisa jelasin enam pertanyaan refleksi Tugas 7 pakai kode yang ada di proyekku?
+> Aku mau tahu hubungan widget tree, MaterialApp, StatelessWidget, context,
+> dan hot reload. Untuk daftar widget, bedain juga mana widget dan mana yang
+> cuma objek konfigurasi seperti ThemeData.
+
+**Hasil penggunaan:**
+
+AI menjelaskan keenam konsep dengan contoh alur MyApp sampai ItemCard,
+penggunaan context untuk tema dan SnackBar, serta perbedaan perubahan tampilan
+dengan inisialisasi ulang aplikasi. Daftar widget dicocokkan dengan berkas
+halaman, tema, dan bagian portofolio. Dokumentasi resmi Flutter menjadi rujukan
+untuk membedakan hot reload, hot restart, dan full restart.
