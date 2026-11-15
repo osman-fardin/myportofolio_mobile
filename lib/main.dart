@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:myportofolio_mobile/menu.dart';
+import 'package:myportofolio_mobile/theme/portfolio_theme.dart';
 
 void main() {
+  LicenseRegistry.addLicense(() async* {
+    final license = await rootBundle.loadString('assets/fonts/OFL.txt');
+    yield LicenseEntryWithLineBreaks(['Space Grotesk'], license);
+  });
   runApp(const MyApp());
 }
 
@@ -12,14 +19,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'MyPortfolio',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: Colors.indigo,
-          secondary: Colors.amber[700],
-          onSecondary: Colors.black,
-        ),
-        useMaterial3: true,
-      ),
+      theme: PortfolioTheme.light,
       home: const MyHomePage(),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:myportofolio_mobile/main.dart';
 import 'package:myportofolio_mobile/menu.dart';
+import 'package:myportofolio_mobile/widgets/portfolio_sections.dart';
 
 void main() {
   testWidgets('Home page displays the owner profile and welcome message', (
@@ -10,8 +11,11 @@ void main() {
   ) async {
     await tester.pumpWidget(const MyApp());
 
-    expect(find.text('MyPortfolio'), findsOneWidget);
-    expect(find.text('Selamat datang di MyPortfolio Mobile!'), findsOneWidget);
+    expect(
+      find.widgetWithText(AppBar, 'Muhammad Osman Fardin'),
+      findsOneWidget,
+    );
+    expect(find.text("Hi, I'm Fardin."), findsOneWidget);
     for (final entry in {
       'NPM': '2506541723',
       'Name': 'Muhammad Osman Fardin',
@@ -48,10 +52,10 @@ void main() {
   );
 
   for (final viewport in [
-    (size: const Size(320, 568), scale: 1.0),
-    (size: const Size(390, 844), scale: 1.0),
-    (size: const Size(1280, 720), scale: 1.0),
-    (size: const Size(320, 240), scale: 2.0),
+    (size: const Size(320, 568), scale: 1.0, stacked: true),
+    (size: const Size(390, 844), scale: 1.0, stacked: true),
+    (size: const Size(1280, 720), scale: 1.0, stacked: false),
+    (size: const Size(320, 240), scale: 2.0, stacked: true),
   ]) {
     testWidgets(
       'Profile and actions remain readable at ${viewport.size}, scale ${viewport.scale}',
@@ -64,7 +68,7 @@ void main() {
         addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
 
         await tester.pumpWidget(const MyApp());
-        final welcome = find.text('Selamat datang di MyPortfolio Mobile!');
+        final welcome = find.text("Hi, I'm Fardin.");
         await tester.ensureVisible(welcome);
         await tester.pumpAndSettle();
         final bounds = tester.getRect(welcome);
@@ -83,6 +87,19 @@ void main() {
           lastActionBounds.bottom,
           lessThanOrEqualTo(viewport.size.height),
         );
+        final firstCard = tester.getRect(
+          find.widgetWithText(ItemCard, 'Lihat Proyek'),
+        );
+        final lastCard = tester.getRect(
+          find.widgetWithText(ItemCard, 'Logout'),
+        );
+        if (viewport.stacked) {
+          expect(lastCard.top, greaterThan(firstCard.bottom));
+          expect(lastCard.left, firstCard.left);
+        } else {
+          expect(lastCard.top, firstCard.top);
+          expect(lastCard.left, greaterThan(firstCard.right));
+        }
         expect(tester.takeException(), isNull);
       },
     );
@@ -94,11 +111,16 @@ void main() {
 
       final card = find.widgetWithText(ItemCard, name);
       expect(card, findsOneWidget);
+      await tester.ensureVisible(card);
+      await tester.pumpAndSettle();
       await tester.tap(card);
       await tester.pumpAndSettle();
 
       expect(find.text('Kamu telah menekan tombol $name!'), findsOneWidget);
-      expect(find.text('MyPortfolio'), findsOneWidget);
+      expect(
+        find.widgetWithText(AppBar, 'Muhammad Osman Fardin'),
+        findsOneWidget,
+      );
       expect(tester.takeException(), isNull);
     });
   }
@@ -107,6 +129,9 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(const MyApp());
+
+    await tester.ensureVisible(find.text('Lihat Proyek'));
+    await tester.pumpAndSettle();
 
     await tester.tap(find.text('Lihat Proyek'));
     await tester.pump(const Duration(milliseconds: 100));
@@ -130,6 +155,12 @@ void main() {
     await tester.pumpWidget(const MyApp());
 
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.pumpAndSettle();
+    final focusedCard = tester.getRect(
+      find.widgetWithText(ItemCard, 'Lihat Proyek'),
+    );
+    expect(focusedCard.top, greaterThanOrEqualTo(64));
+    expect(focusedCard.bottom, lessThanOrEqualTo(600));
     await tester.sendKeyEvent(LogicalKeyboardKey.enter);
     await tester.pumpAndSettle();
 
@@ -137,6 +168,38 @@ void main() {
       find.text('Kamu telah menekan tombol Lihat Proyek!'),
       findsOneWidget,
     );
+    expect(tester.takeException(), isNull);
+  });
+
+  testWidgets('About content and footer are reachable on a small screen', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(390, 844);
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    await tester.pumpWidget(const MyApp());
+    await tester.ensureVisible(find.byType(PortfolioAbout));
+    await tester.pumpAndSettle();
+
+    expect(find.text('About me'), findsOneWidget);
+    expect(find.bySemanticsLabel('Foto Muhammad Osman Fardin'), findsOneWidget);
+    expect(
+      find.text('S1 Ilmu Komputer · Universitas Indonesia'),
+      findsOneWidget,
+    );
+
+    final footer = find.text(
+      '© 2026 Muhammad Osman Fardin.\n'
+      'Fakultas Ilmu Komputer, Universitas Indonesia.',
+    );
+    await tester.ensureVisible(footer);
+    await tester.pumpAndSettle();
+    final bounds = tester.getRect(footer);
+    expect(bounds.left, greaterThanOrEqualTo(0));
+    expect(bounds.right, lessThanOrEqualTo(390));
+    expect(bounds.top, greaterThanOrEqualTo(64));
+    expect(bounds.bottom, lessThanOrEqualTo(844));
     expect(tester.takeException(), isNull);
   });
 }
