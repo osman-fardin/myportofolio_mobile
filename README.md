@@ -15,6 +15,8 @@ mata kuliah Pemrograman Berbasis Platform. Proyek ini dikembangkan terpisah dari
 - Kartu informasi pemilik portofolio dan pesan sambutan.
 - Tiga kartu aksi: Lihat Proyek, Tambah Proyek, dan Logout dengan feedback SnackBar.
 - Warna aksi berbeda mengikuti palet web: navy, cloud, dan copper.
+- Tampilan mengikuti web: latar paper, Space Grotesk, header bergaris, dan panel About.
+- Foto, tekstur latar, serta font tersedia sebagai aset lokal.
 - Layout yang dapat digulir, dukungan teks diperbesar, dan aktivasi menu melalui keyboard.
 
 ## Technology
@@ -40,8 +42,11 @@ flutter run -d chrome
 
 ## Project Structure
 
-- `lib/main.dart`: titik masuk, konfigurasi tema, dan halaman awal aplikasi.
+- `lib/main.dart`: titik masuk, pemilihan tema, dan pendaftaran lisensi font.
 - `lib/menu.dart`: halaman utama, InfoCard, model ItemHomepage, dan ItemCard.
+- `lib/theme/portfolio_theme.dart`: warna dan konfigurasi tema bersama.
+- `lib/widgets/portfolio_sections.dart`: bagian intro, About, dan footer.
+- `assets/`: font beserta lisensi dan gambar dari web portofolio.
 - `test/`: pengujian widget.
 - `pubspec.yaml`: konfigurasi proyek dan dependency.
 - `pubspec.lock`: versi dependency yang digunakan.
@@ -55,19 +60,23 @@ flutter test
 dart format --output=none --set-exit-if-changed lib test
 ```
 
-Verifikasi terakhir: 14 widget test lulus, analisis statis dan format bersih.
+Verifikasi terakhir: 15 widget test lulus, analisis statis dan format bersih.
 Test mencakup isi kartu, layout dan teks 200%, pesan ketiga aksi, tap berulang,
 keyboard, warna unik, serta kontras teks/ikon pada warna terang dan gelap.
-Interaksi dan tampilan Chrome diperiksa pada lebar 320, 390, dan 1280 px.
+Test juga memeriksa perubahan susunan kartu dan keterjangkauan About/footer.
+Interaksi dan tampilan Chrome diperiksa pada lebar 320, 390, 768, dan 1280 px.
+Build web berhasil menggunakan `flutter build web --no-web-resources-cdn`;
+font, gambar, dan renderer pada build yang diperiksa termuat dari server lokal.
 
 ## Development Progress
 
 Proyek telah diinisialisasi pada commit `3d432c5`. Halaman utama dipisahkan ke
 menu.dart sebagai StatelessWidget, dengan tema Material 3.
-Halaman menampilkan tiga InfoCard (NPM, Name, Class) dan sambutan dengan
-identitas Muhammad Osman Fardin, NPM 2506541723, kelas PBP D. Struktur halaman
-mengikuti pola tutorial dengan data pemilik portofolio. Tiga menu aksi tersusun
-dalam grid dan menampilkan pesan melalui SnackBar. Pada tahap ini tombol belum
+Halaman menampilkan tiga InfoCard (NPM, Name, Class) dengan identitas Muhammad
+Osman Fardin, NPM 2506541723, kelas PBP D. Intro dan About memakai isi profil
+serta gaya web yang sama. Grid aksi menjadi satu kolom pada layar sempit atau
+teks besar, dan tiga kolom pada layar lebar. Setiap aksi menampilkan pesan
+melalui SnackBar. Pada tahap ini tombol belum
 melakukan navigasi, penambahan data, atau logout autentikasi. Integrasi API belum
 diterapkan; build Android, iOS, dan desktop belum diverifikasi.
 
@@ -76,7 +85,7 @@ diterapkan; build Android, iOS, dan desktop belum diverifikasi.
 | Tahap | Progres |
 | --- | --- |
 | Tutorial 08, 11 November 2026 | Halaman utama, identitas, tiga kartu aksi, SnackBar, dan widget test; PR #1 merged. |
-| Tugas 7, 14 November 2026 | Warna per ItemHomepage dan pemilihan teks/ikon kontras. Adaptasi tampilan web dan enam refleksi menyusul. |
+| Tugas 7, 14 November 2026 | Warna per ItemHomepage, kontras teks/ikon, dan adaptasi tampilan web. Enam refleksi menyusul. |
 
 Warna disimpan pada model ItemHomepage dan diterapkan langsung oleh ItemCard.
 Palet navy `#23354D`, cloud `#526F7A`, dan copper `#B6643D` berasal dari
@@ -84,6 +93,10 @@ Palet navy `#23354D`, cloud `#526F7A`, dan copper `#B6643D` berasal dari
 Teks/ikon hitam atau putih dipilih berdasarkan rasio kontras terhadap warna
 kartu. Test memeriksa rasio label minimal 4.5:1; ini tidak menyatakan seluruh
 aplikasi sudah memenuhi semua kriteria aksesibilitas.
+
+Font Space Grotesk disertakan bersama SIL Open Font License 1.1. Gambar dan
+teks profil mengikuti repo web yang sama; sumber aset dicatat pada
+[Visual Assets](assets/README.md). Tidak ada paket runtime tambahan.
 
 ## AI Disclosure
 

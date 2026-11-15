@@ -100,3 +100,20 @@ dibaca oleh ItemCard, sehingga setiap menu memiliki warna sendiri tanpa
 percabangan berdasarkan nama. Palet navy, cloud, dan copper mengikuti web
 portofolio. Penjelasan kontras membantu memahami pemilihan teks dan ikon
 hitam atau putih agar tetap terbaca pada warna latar yang berbeda.
+
+## 7. Membawa gaya web ke aplikasi Flutter
+
+**Prompt (ringkasan):**
+
+> Aku mau tampilan mobile-nya terasa sama kayak web portofolioku. Bisa jelasin
+> cara mengatur tema, font, foto, sama background-nya di Flutter? Susunan
+> kartunya juga disesuaikan sama lebar layar, tapi data dan SnackBar tetap ada.
+
+**Hasil penggunaan:**
+
+AI menjelaskan penggunaan ThemeData untuk menyatukan warna dan tipografi,
+serta pubspec.yaml untuk mendaftarkan font dan gambar lokal. LayoutBuilder
+membaca ruang yang tersedia sehingga kartu bisa disusun vertikal di layar
+kecil dan sejajar di layar lebar. Pemisahan bagian intro, About, dan footer
+membantu menjaga halaman utama tetap mudah dibaca. Lisensi font ikut
+disertakan bersama aset Space Grotesk.
