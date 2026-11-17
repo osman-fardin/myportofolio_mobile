@@ -150,3 +150,19 @@ terpisah dari Flutter SDK. Paket ditambahkan melalui pubspec.yaml, sedangkan
 pubspec.lock mencatat versi hasil resolusi dependency. Impor pada aplikasi dan
 test perlu disesuaikan bersama karena komponen dari dua pustaka dapat memiliki
 tipe yang berbeda. Penyesuaian ini tidak memerlukan pembaruan Flutter SDK.
+
+## 10. Memisahkan halaman dan kartu aksi
+
+**Prompt (ringkasan):**
+
+> Kalau halaman dipindah ke folder screens dan ItemCard ke widgets, import
+> mana saja yang perlu disesuaikan? ItemHomepage sebaiknya ditaruh di mana
+> supaya kartu tidak bergantung pada halaman utama?
+
+**Hasil penggunaan:**
+
+AI menjelaskan bahwa screens menyusun halaman, sedangkan widgets menampung
+komponen antarmuka yang dapat dipakai ulang. ItemHomepage ditempatkan bersama
+ItemCard karena menjadi data yang diterima kartu, sehingga keduanya tidak
+perlu mengimpor halaman utama. Referensi pada main.dart dan test ikut mengikuti
+lokasi baru. Pemisahan berkas mempertahankan tampilan dan perilaku SnackBar.

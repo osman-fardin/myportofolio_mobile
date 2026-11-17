@@ -51,7 +51,8 @@ flutter run -d chrome
 ## Project Structure
 
 - `lib/main.dart`: titik masuk, pemilihan tema, dan pendaftaran lisensi font.
-- `lib/menu.dart`: halaman utama, InfoCard, model ItemHomepage, dan ItemCard.
+- `lib/screens/menu.dart`: halaman utama dan InfoCard.
+- `lib/widgets/project_card.dart`: model ItemHomepage dan widget ItemCard.
 - `lib/theme/portfolio_theme.dart`: warna dan konfigurasi tema bersama.
 - `lib/widgets/portfolio_sections.dart`: bagian intro, About, dan footer.
 - `assets/`: font beserta lisensi dan gambar dari web portofolio.
@@ -93,7 +94,7 @@ diterapkan; build Android, iOS, dan desktop belum diverifikasi.
 | --- | --- |
 | Tutorial 08, 11 November 2026 | Halaman utama, identitas, tiga kartu aksi, SnackBar, dan widget test; PR #1 merged pada checkpoint `e642989`. |
 | Tugas 7, 14–15 November 2026 | Warna kartu pada `050626a`, adaptasi UI web pada `9bf2248`, 15 widget test, serta enam refleksi pada README ini. |
-| Tutorial 09, 17 November 2026 | Menyiapkan dependency dan impor Material UI; drawer, form, dan navigasi belum ditambahkan. |
+| Tutorial 09, 17 November 2026 | Dependency Material UI pada `c882558`; halaman dan kartu aksi dipisahkan ke screens/widgets. Drawer, form, dan navigasi belum ditambahkan. |
 
 Warna disimpan pada model ItemHomepage dan diterapkan langsung oleh ItemCard.
 Palet navy `#23354D`, cloud `#526F7A`, dan copper `#B6643D` berasal dari
