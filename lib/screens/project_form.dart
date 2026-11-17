@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/theme/portfolio_theme.dart';
+import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 
 class ProjectFormPage extends StatefulWidget {
   const ProjectFormPage({super.key});
@@ -163,8 +164,14 @@ class _ProjectFormPageState extends State<ProjectFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final canGoBack = Navigator.of(context).canPop();
     return Scaffold(
-      appBar: AppBar(title: const Text('Tambah Proyek')),
+      appBar: AppBar(
+        title: const Text('Tambah Proyek'),
+        leading: canGoBack ? const BackButton() : const DrawerButton(),
+        actions: [if (canGoBack) const DrawerButton()],
+      ),
+      drawer: const LeftDrawer(destination: PortfolioDestination.addProject),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),

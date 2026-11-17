@@ -1,5 +1,6 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/theme/portfolio_theme.dart';
+import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/portfolio_sections.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
 
@@ -33,6 +34,7 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
       ),
+      drawer: const LeftDrawer(destination: PortfolioDestination.home),
       body: LayoutBuilder(
         builder: (context, viewport) {
           final padding = viewport.maxWidth >= 900 ? 32.0 : 20.0;

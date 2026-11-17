@@ -18,8 +18,8 @@ mata kuliah Pemrograman Berbasis Platform. Proyek ini dikembangkan terpisah dari
 - Tampilan mengikuti web: latar paper, Space Grotesk, header bergaris, dan panel About.
 - Foto, tekstur latar, serta font tersedia sebagai aset lokal.
 - Layout yang dapat digulir, dukungan teks diperbesar, dan aktivasi menu melalui keyboard.
-- Form proyek dengan validasi, dialog ringkasan, dan reset setelah konfirmasi;
-  halaman ini belum terhubung ke menu Home pada checkpoint saat ini.
+- Drawer Home/Tambah Proyek pada kedua halaman dan navigasi dari kartu Tambah Proyek.
+- Form proyek dengan validasi, dialog ringkasan, dan reset setelah konfirmasi.
 
 ## Technology
 
@@ -56,6 +56,7 @@ flutter run -d chrome
 - `lib/screens/menu.dart`: halaman utama dan InfoCard.
 - `lib/screens/project_form.dart`: formulir proyek dan pratinjau input lokal.
 - `lib/widgets/project_card.dart`: model ItemHomepage dan widget ItemCard.
+- `lib/widgets/left_drawer.dart`: drawer bersama dan pemilihan halaman tujuan.
 - `lib/theme/portfolio_theme.dart`: warna dan konfigurasi tema bersama.
 - `lib/widgets/portfolio_sections.dart`: bagian intro, About, dan footer.
 - `assets/`: font beserta lisensi dan gambar dari web portofolio.
@@ -72,18 +73,24 @@ flutter test
 dart format --output=none --set-exit-if-changed lib test
 ```
 
-Verifikasi terakhir: 26 widget test lulus, analisis statis dan format bersih.
+Verifikasi terakhir: 31 widget test lulus, analisis statis dan format bersih.
 Test mencakup isi kartu, layout dan teks 200%, pesan ketiga aksi, tap berulang,
 keyboard, warna unik, serta kontras teks/ikon pada warna terang dan gelap.
 Test juga memeriksa perubahan susunan kartu dan keterjangkauan About/footer.
 Sebelas test form mencakup input wajib, batas panjang, URL, urutan tampilan,
 jenis bebas, ringkasan, reset, pembatalan dialog, dan layar 320 px/teks 200%.
+Lima test navigasi memeriksa Back dari kartu, pergantian halaman melalui drawer,
+pilihan halaman aktif tanpa kehilangan draft, riwayat campuran, serta drawer
+pada layar 320 px/teks 200%. Test keyboard memperhitungkan tombol drawer baru.
 Pada checkpoint Tugas 7, interaksi dan tampilan Chrome diperiksa pada lebar
 320, 390, 768, dan 1280 px. Build web saat itu berhasil menggunakan
 `flutter build web --no-web-resources-cdn`;
 font, gambar, dan renderer pada build yang diperiksa termuat dari server lokal.
-Form Tutorial 09 baru diverifikasi melalui widget test; pemeriksaan browser
-dan build baru dilakukan setelah navigasi terhubung.
+Build web Tutorial 09 juga berhasil. Chrome diperiksa untuk drawer/form pada
+390 px, dialog pada 320/390 px, serta Home/form dan browser Back pada 1280 px.
+Pengisian dengan keyboard, dropdown jenis bebas, ringkasan, dan reset setelah
+OK dicoba; console yang diperiksa mencatat nol error/warning. Font, renderer,
+dan gambar pada sesi ini termuat lokal. Build native belum diverifikasi.
 
 ## Development Progress
 
@@ -93,9 +100,9 @@ Halaman menampilkan tiga InfoCard (NPM, Name, Class) dengan identitas Muhammad
 Osman Fardin, NPM 2506541723, kelas PBP D. Intro dan About memakai isi profil
 serta gaya web yang sama. Grid aksi menjadi satu kolom pada layar sempit atau
 teks besar, dan tiga kolom pada layar lebar. Setiap aksi menampilkan pesan
-melalui SnackBar. Form proyek sudah tersedia sebagai halaman mandiri dan diuji
-langsung; tombol Home belum melakukan navigasi, penambahan data, atau logout
-autentikasi. Integrasi API belum diterapkan; build Android, iOS, dan desktop
+melalui SnackBar. Kartu Tambah Proyek membuka form; drawer menghubungkan Home
+dan form. Lihat Proyek dan Logout masih berupa feedback SnackBar. Form belum
+menyimpan data. Integrasi API belum diterapkan; build Android, iOS, dan desktop
 belum diverifikasi.
 
 ### Weekly Progress
@@ -104,7 +111,7 @@ belum diverifikasi.
 | --- | --- |
 | Tutorial 08, 11 November 2026 | Halaman utama, identitas, tiga kartu aksi, SnackBar, dan widget test; PR #1 merged pada checkpoint `e642989`. |
 | Tugas 7, 14–15 November 2026 | Warna kartu pada `050626a`, adaptasi UI web pada `9bf2248`, 15 widget test, serta enam refleksi pada README ini. |
-| Tutorial 09, 17 November 2026 | Material UI pada `c882558`, pemisahan screen/widget pada `07e3c0c`, serta form/validasi/dialog/reset dengan 11 test baru. Drawer dan navigasi belum ditambahkan. |
+| Tutorial 09, 17 November 2026 | Material UI pada `c882558`, pemisahan screen/widget pada `07e3c0c`, form pada `d8ad32c`, serta drawer/navigasi dengan total 31 test. |
 
 Warna disimpan pada model ItemHomepage dan diterapkan langsung oleh ItemCard.
 Palet navy `#23354D`, cloud `#526F7A`, dan copper `#B6643D` berasal dari
@@ -145,6 +152,23 @@ menjalankan `FormState.validate()` dan `save()` sebelum membuka dialog.
 Menekan OK mereset seluruh input dan pilihan. Menutup dialog dengan Back atau
 klik di luar dialog mempertahankan draft. Pola Form/GlobalKey mengacu pada
 [panduan validasi Flutter](https://docs.flutter.dev/cookbook/forms/validation).
+
+## Navigation
+
+Drawer tersedia di Home dan form. Memilih halaman aktif cukup menutup drawer,
+sehingga draft tidak hilang. Berpindah ke tujuan lain menutup drawer dan
+memakai `pushReplacement`; kartu Tambah Proyek menampilkan SnackBar lalu
+memakai `push`. Form yang dibuka dari kartu menyediakan tombol Back dan drawer.
+
+| Alur | Hasil riwayat |
+| --- | --- |
+| Home → form melalui kartu | Form ditumpuk di atas Home; Back kembali ke Home yang sama. |
+| Home ↔ form melalui drawer dari root | Route teratas diganti; pergantian berulang tidak menambah tumpukan. |
+| Home → form lewat kartu → Home lewat drawer | Form diganti Home baru; Home sebelumnya tetap di bawah dan dapat dijangkau dengan Back. |
+
+`pushReplacement` mengganti satu route teratas, bukan membersihkan seluruh
+riwayat. Rujukan: [navigasi dan Back](https://docs.flutter.dev/cookbook/navigation/navigation-basics)
+serta [pushReplacement](https://api.flutter.dev/flutter/widgets/Navigator/pushReplacement.html).
 
 ## Pertanyaan Reflektif
 

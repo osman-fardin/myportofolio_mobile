@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:myportofolio_mobile/main.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
+import 'package:myportofolio_mobile/screens/project_form.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
 import 'package:myportofolio_mobile/widgets/portfolio_sections.dart';
 
@@ -118,10 +119,14 @@ void main() {
       await tester.pumpAndSettle();
 
       expect(find.text('Kamu telah menekan tombol $name!'), findsOneWidget);
-      expect(
-        find.widgetWithText(AppBar, 'Muhammad Osman Fardin'),
-        findsOneWidget,
-      );
+      if (name == 'Tambah Proyek') {
+        expect(find.byType(ProjectFormPage), findsOneWidget);
+      } else {
+        expect(
+          find.widgetWithText(AppBar, 'Muhammad Osman Fardin'),
+          findsOneWidget,
+        );
+      }
       expect(tester.takeException(), isNull);
     });
   }
@@ -136,13 +141,16 @@ void main() {
 
     await tester.tap(find.text('Lihat Proyek'));
     await tester.pump(const Duration(milliseconds: 100));
-    await tester.tap(find.text('Tambah Proyek'));
-    await tester.pump(const Duration(milliseconds: 50));
     await tester.tap(find.text('Logout'));
+    await tester.pump(const Duration(milliseconds: 50));
+    await tester.tap(find.text('Lihat Proyek'));
     await tester.pumpAndSettle();
 
-    expect(find.text('Kamu telah menekan tombol Logout!'), findsOneWidget);
-    expect(find.text('Kamu telah menekan tombol Lihat Proyek!'), findsNothing);
+    expect(
+      find.text('Kamu telah menekan tombol Lihat Proyek!'),
+      findsOneWidget,
+    );
+    expect(find.text('Kamu telah menekan tombol Logout!'), findsNothing);
     expect(find.text('Kamu telah menekan tombol Tambah Proyek!'), findsNothing);
     expect(find.byType(SnackBar), findsOneWidget);
 
@@ -155,6 +163,8 @@ void main() {
   testWidgets('Keyboard users can activate the first action', (tester) async {
     await tester.pumpWidget(const MyApp());
 
+    await tester.sendKeyEvent(LogicalKeyboardKey.tab);
+    await tester.pumpAndSettle();
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.pumpAndSettle();
     final focusedCard = tester.getRect(

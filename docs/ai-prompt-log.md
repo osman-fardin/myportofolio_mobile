@@ -184,3 +184,20 @@ state menyimpan pilihan jenis proyek yang menentukan munculnya input tambahan.
 Key pada kelompok field menjaga isian ketika susunan widget berubah. Dialog
 menerima ringkasan input sementara, lalu konfirmasi OK mereset field dan pilihan
 bersama. Belum ada penyimpanan data ke backend.
+
+## 12. Memahami drawer dan riwayat navigasi
+
+**Prompt (ringkasan):**
+
+> Kenapa tombol Tambah Proyek memakai push, tapi drawer memakai
+> pushReplacement? Jelasin efeknya ke Back. Gimana supaya memilih halaman
+> yang sedang dibuka tidak menghapus draft dan SnackBar tetap berfungsi?
+
+**Hasil penggunaan:**
+
+AI menjelaskan bahwa push menambahkan halaman pada stack, sedangkan
+pushReplacement mengganti halaman teratas. Drawer ditutup sebelum berpindah;
+memilih tujuan yang sama hanya menutup drawer. Karena route di bawahnya tidak
+ikut dihapus, gabungan navigasi kartu dan drawer dapat menyisakan Home lama
+untuk dikunjungi lewat Back. Kartu tetap memberi feedback SnackBar sebelum
+membuka form, dan form menyediakan akses Back serta drawer.
