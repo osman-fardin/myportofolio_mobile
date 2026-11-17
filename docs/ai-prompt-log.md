@@ -1,7 +1,7 @@
 # AI Prompt Log
 
 Dokumen ini berisi beberapa contoh prompt yang mewakili penggunaan OpenAI Codex
-selama Tutorial 08 dan Tugas 7. Prompt diringkas dari percakapan agar lebih
+selama Tutorial 08, Tugas 7, dan Tutorial 09. Prompt diringkas dari percakapan agar lebih
 mudah dibaca, bukan transkrip literal. Selain penjelasan konsep, Codex juga
 membantu menyunting kode dan dokumentasi serta menjalankan pengujian.
 Commit, push, merge, dan pengumpulan saya lakukan sendiri.
@@ -134,3 +134,70 @@ penggunaan context untuk tema dan SnackBar, serta perbedaan perubahan tampilan
 dengan inisialisasi ulang aplikasi. Daftar widget dicocokkan dengan berkas
 halaman, tema, dan bagian portofolio. Dokumentasi resmi Flutter menjadi rujukan
 untuk membedakan hot reload, hot restart, dan full restart.
+
+## 9. Memahami perubahan pustaka Material
+
+**Prompt (ringkasan):**
+
+> Di materi, import Material sekarang pakai material_ui. Bedanya dengan import
+> sebelumnya apa? Bisa jelasin cara menyesuaikannya dengan versi Flutter yang
+> kupakai dan bantu cek supaya tema serta fitur lama tetap berjalan?
+
+**Hasil penggunaan:**
+
+AI menjelaskan bahwa material_ui menyediakan komponen Material sebagai paket
+terpisah dari Flutter SDK. Paket ditambahkan melalui pubspec.yaml, sedangkan
+pubspec.lock mencatat versi hasil resolusi dependency. Impor pada aplikasi dan
+test perlu disesuaikan bersama karena komponen dari dua pustaka dapat memiliki
+tipe yang berbeda. Penyesuaian ini tidak memerlukan pembaruan Flutter SDK.
+
+## 10. Memisahkan halaman dan kartu aksi
+
+**Prompt (ringkasan):**
+
+> Kalau halaman dipindah ke folder screens dan ItemCard ke widgets, import
+> mana saja yang perlu disesuaikan? ItemHomepage sebaiknya ditaruh di mana
+> supaya kartu tidak bergantung pada halaman utama?
+
+**Hasil penggunaan:**
+
+AI menjelaskan bahwa screens menyusun halaman, sedangkan widgets menampung
+komponen antarmuka yang dapat dipakai ulang. ItemHomepage ditempatkan bersama
+ItemCard karena menjadi data yang diterima kartu, sehingga keduanya tidak
+perlu mengimpor halaman utama. Referensi pada main.dart dan test ikut mengikuti
+lokasi baru. Pemisahan berkas mempertahankan tampilan dan perilaku SnackBar.
+
+## 11. Memahami form, validasi, dan ringkasan proyek
+
+**Prompt (ringkasan):**
+
+> Gimana cara membuat form sesuai field Project-ku? Jelasin hubungan
+> StatefulWidget, Form, GlobalKey, validator, dan onSaved. Aku juga perlu
+> dropdown yang tetap bisa diisi jenis lain, dialog ringkasan, dan reset
+> setelah OK tanpa membawa data proyek sebelumnya.
+
+**Hasil penggunaan:**
+
+AI menjelaskan bahwa validator memeriksa input, sedangkan onSaved mengambil
+nilai setelah form valid. GlobalKey memberi akses ke validate, save, dan reset;
+state menyimpan pilihan jenis proyek yang menentukan munculnya input tambahan.
+Key pada kelompok field menjaga isian ketika susunan widget berubah. Dialog
+menerima ringkasan input sementara, lalu konfirmasi OK mereset field dan pilihan
+bersama. Belum ada penyimpanan data ke backend.
+
+## 12. Memahami drawer dan riwayat navigasi
+
+**Prompt (ringkasan):**
+
+> Kenapa tombol Tambah Proyek memakai push, tapi drawer memakai
+> pushReplacement? Jelasin efeknya ke Back. Gimana supaya memilih halaman
+> yang sedang dibuka tidak menghapus draft dan SnackBar tetap berfungsi?
+
+**Hasil penggunaan:**
+
+AI menjelaskan bahwa push menambahkan halaman pada stack, sedangkan
+pushReplacement mengganti halaman teratas. Drawer ditutup sebelum berpindah;
+memilih tujuan yang sama hanya menutup drawer. Karena route di bawahnya tidak
+ikut dihapus, gabungan navigasi kartu dan drawer dapat menyisakan Home lama
+untuk dikunjungi lewat Back. Kartu tetap memberi feedback SnackBar sebelum
+membuka form, dan form menyediakan akses Back serta drawer.
