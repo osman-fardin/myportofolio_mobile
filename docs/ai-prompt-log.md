@@ -1,7 +1,7 @@
 # AI Prompt Log
 
 Dokumen ini berisi beberapa contoh prompt yang mewakili penggunaan OpenAI Codex
-selama Tutorial 08 dan Tugas 7. Prompt diringkas dari percakapan agar lebih
+selama Tutorial 08, Tugas 7, dan Tutorial 09. Prompt diringkas dari percakapan agar lebih
 mudah dibaca, bukan transkrip literal. Selain penjelasan konsep, Codex juga
 membantu menyunting kode dan dokumentasi serta menjalankan pengujian.
 Commit, push, merge, dan pengumpulan saya lakukan sendiri.
@@ -134,3 +134,19 @@ penggunaan context untuk tema dan SnackBar, serta perbedaan perubahan tampilan
 dengan inisialisasi ulang aplikasi. Daftar widget dicocokkan dengan berkas
 halaman, tema, dan bagian portofolio. Dokumentasi resmi Flutter menjadi rujukan
 untuk membedakan hot reload, hot restart, dan full restart.
+
+## 9. Memahami perubahan pustaka Material
+
+**Prompt (ringkasan):**
+
+> Di materi, import Material sekarang pakai material_ui. Bedanya dengan import
+> sebelumnya apa? Bisa jelasin cara menyesuaikannya dengan versi Flutter yang
+> kupakai dan bantu cek supaya tema serta fitur lama tetap berjalan?
+
+**Hasil penggunaan:**
+
+AI menjelaskan bahwa material_ui menyediakan komponen Material sebagai paket
+terpisah dari Flutter SDK. Paket ditambahkan melalui pubspec.yaml, sedangkan
+pubspec.lock mencatat versi hasil resolusi dependency. Impor pada aplikasi dan
+test perlu disesuaikan bersama karena komponen dari dua pustaka dapat memiliki
+tipe yang berbeda. Penyesuaian ini tidak memerlukan pembaruan Flutter SDK.

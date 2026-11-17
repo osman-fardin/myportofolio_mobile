@@ -24,6 +24,7 @@ mata kuliah Pemrograman Berbasis Platform. Proyek ini dikembangkan terpisah dari
 - Flutter 3.47.6
 - Dart 3.13.5
 - Material Design
+- Material UI (`material_ui`), pustaka komponen Material yang terpisah dari SDK.
 
 ## Local Setup
 
@@ -92,6 +93,7 @@ diterapkan; build Android, iOS, dan desktop belum diverifikasi.
 | --- | --- |
 | Tutorial 08, 11 November 2026 | Halaman utama, identitas, tiga kartu aksi, SnackBar, dan widget test; PR #1 merged pada checkpoint `e642989`. |
 | Tugas 7, 14–15 November 2026 | Warna kartu pada `050626a`, adaptasi UI web pada `9bf2248`, 15 widget test, serta enam refleksi pada README ini. |
+| Tutorial 09, 17 November 2026 | Menyiapkan dependency dan impor Material UI; drawer, form, dan navigasi belum ditambahkan. |
 
 Warna disimpan pada model ItemHomepage dan diterapkan langsung oleh ItemCard.
 Palet navy `#23354D`, cloud `#526F7A`, dan copper `#B6643D` berasal dari
@@ -102,7 +104,10 @@ aplikasi sudah memenuhi semua kriteria aksesibilitas.
 
 Font Space Grotesk disertakan bersama SIL Open Font License 1.1. Gambar dan
 teks profil mengikuti repo web yang sama; sumber aset dicatat pada
-[Visual Assets](assets/README.md). Tidak ada paket runtime tambahan.
+[Visual Assets](assets/README.md). Tutorial 09 memakai `material_ui` sesuai
+[panduan migrasi resmi Flutter](https://docs.flutter.dev/release/breaking-changes/material-ui-and-cupertino-ui).
+Impor aplikasi dan test memakai pustaka yang sama agar tipe komponen dan tema
+konsisten. Flutter SDK tetap 3.47.6.
 
 ## Pertanyaan Reflektif
 

@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 /// Token visual yang dipakai bersama oleh web dan aplikasi mobile portofolio.
 abstract final class PortfolioColors {
