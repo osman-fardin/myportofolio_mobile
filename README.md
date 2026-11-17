@@ -18,6 +18,8 @@ mata kuliah Pemrograman Berbasis Platform. Proyek ini dikembangkan terpisah dari
 - Tampilan mengikuti web: latar paper, Space Grotesk, header bergaris, dan panel About.
 - Foto, tekstur latar, serta font tersedia sebagai aset lokal.
 - Layout yang dapat digulir, dukungan teks diperbesar, dan aktivasi menu melalui keyboard.
+- Form proyek dengan validasi, dialog ringkasan, dan reset setelah konfirmasi;
+  halaman ini belum terhubung ke menu Home pada checkpoint saat ini.
 
 ## Technology
 
@@ -52,6 +54,7 @@ flutter run -d chrome
 
 - `lib/main.dart`: titik masuk, pemilihan tema, dan pendaftaran lisensi font.
 - `lib/screens/menu.dart`: halaman utama dan InfoCard.
+- `lib/screens/project_form.dart`: formulir proyek dan pratinjau input lokal.
 - `lib/widgets/project_card.dart`: model ItemHomepage dan widget ItemCard.
 - `lib/theme/portfolio_theme.dart`: warna dan konfigurasi tema bersama.
 - `lib/widgets/portfolio_sections.dart`: bagian intro, About, dan footer.
@@ -69,13 +72,18 @@ flutter test
 dart format --output=none --set-exit-if-changed lib test
 ```
 
-Verifikasi terakhir: 15 widget test lulus, analisis statis dan format bersih.
+Verifikasi terakhir: 26 widget test lulus, analisis statis dan format bersih.
 Test mencakup isi kartu, layout dan teks 200%, pesan ketiga aksi, tap berulang,
 keyboard, warna unik, serta kontras teks/ikon pada warna terang dan gelap.
 Test juga memeriksa perubahan susunan kartu dan keterjangkauan About/footer.
-Interaksi dan tampilan Chrome diperiksa pada lebar 320, 390, 768, dan 1280 px.
-Build web berhasil menggunakan `flutter build web --no-web-resources-cdn`;
+Sebelas test form mencakup input wajib, batas panjang, URL, urutan tampilan,
+jenis bebas, ringkasan, reset, pembatalan dialog, dan layar 320 px/teks 200%.
+Pada checkpoint Tugas 7, interaksi dan tampilan Chrome diperiksa pada lebar
+320, 390, 768, dan 1280 px. Build web saat itu berhasil menggunakan
+`flutter build web --no-web-resources-cdn`;
 font, gambar, dan renderer pada build yang diperiksa termuat dari server lokal.
+Form Tutorial 09 baru diverifikasi melalui widget test; pemeriksaan browser
+dan build baru dilakukan setelah navigasi terhubung.
 
 ## Development Progress
 
@@ -85,8 +93,10 @@ Halaman menampilkan tiga InfoCard (NPM, Name, Class) dengan identitas Muhammad
 Osman Fardin, NPM 2506541723, kelas PBP D. Intro dan About memakai isi profil
 serta gaya web yang sama. Grid aksi menjadi satu kolom pada layar sempit atau
 teks besar, dan tiga kolom pada layar lebar. Setiap aksi menampilkan pesan
-melalui SnackBar. Pada tahap ini tombol belum melakukan navigasi, penambahan data, atau logout autentikasi. Integrasi API belum
-diterapkan; build Android, iOS, dan desktop belum diverifikasi.
+melalui SnackBar. Form proyek sudah tersedia sebagai halaman mandiri dan diuji
+langsung; tombol Home belum melakukan navigasi, penambahan data, atau logout
+autentikasi. Integrasi API belum diterapkan; build Android, iOS, dan desktop
+belum diverifikasi.
 
 ### Weekly Progress
 
@@ -94,7 +104,7 @@ diterapkan; build Android, iOS, dan desktop belum diverifikasi.
 | --- | --- |
 | Tutorial 08, 11 November 2026 | Halaman utama, identitas, tiga kartu aksi, SnackBar, dan widget test; PR #1 merged pada checkpoint `e642989`. |
 | Tugas 7, 14–15 November 2026 | Warna kartu pada `050626a`, adaptasi UI web pada `9bf2248`, 15 widget test, serta enam refleksi pada README ini. |
-| Tutorial 09, 17 November 2026 | Dependency Material UI pada `c882558`; halaman dan kartu aksi dipisahkan ke screens/widgets. Drawer, form, dan navigasi belum ditambahkan. |
+| Tutorial 09, 17 November 2026 | Material UI pada `c882558`, pemisahan screen/widget pada `07e3c0c`, serta form/validasi/dialog/reset dengan 11 test baru. Drawer dan navigasi belum ditambahkan. |
 
 Warna disimpan pada model ItemHomepage dan diterapkan langsung oleh ItemCard.
 Palet navy `#23354D`, cloud `#526F7A`, dan copper `#B6643D` berasal dari
@@ -110,9 +120,38 @@ teks profil mengikuti repo web yang sama; sumber aset dicatat pada
 Impor aplikasi dan test memakai pustaka yang sama agar tipe komponen dan tema
 konsisten. Flutter SDK tetap 3.47.6.
 
+## Project Form
+
+Form mengikuti field `Project` pada backend portofolio. Data hanya ditampilkan
+dalam dialog pratinjau, belum dikirim ke API atau disimpan ke database.
+
+| Field | Aturan input |
+| --- | --- |
+| `title` | Nama proyek wajib, maksimal 200 karakter. |
+| `project_type` | Pilihan jenis proyek; Lainnya membuka teks bebas wajib, maksimal 100 karakter. |
+| `role` | Peran wajib, maksimal 100 karakter. |
+| `description` | Deskripsi wajib. |
+| `technologies` | Teknologi wajib, satu teknologi per baris. |
+| `live_url` | URL proyek wajib, HTTP(S), maksimal 200 karakter. |
+| `source_url` | URL source code opsional, HTTP(S), maksimal 200 karakter. |
+| `thumbnail_path` | Path thumbnail opsional, maksimal 255 karakter. |
+| `display_order` | Bilangan bulat 0–32767, nilai awal 0. |
+
+Pilihan dropdown adalah bantuan input untuk `project_type` yang berupa teks
+bebas, bukan enum baru pada backend. Validasi lokal ini tidak menggantikan
+validasi backend saat API dihubungkan nanti. Isian dirapikan dengan trim;
+field wajib menolak input yang hanya berisi spasi. Tombol Pratinjau proyek
+menjalankan `FormState.validate()` dan `save()` sebelum membuka dialog.
+Menekan OK mereset seluruh input dan pilihan. Menutup dialog dengan Back atau
+klik di luar dialog mempertahankan draft. Pola Form/GlobalKey mengacu pada
+[panduan validasi Flutter](https://docs.flutter.dev/cookbook/forms/validation).
+
 ## Pertanyaan Reflektif
 
 ### Tugas 7
+
+Jawaban ini merujuk pada checkpoint Tugas 7 (`de6f8b3`). Perubahan sesudahnya
+dicatat pada Development Progress dan Project Form.
 
 1. **Widget tree dan hubungan parent–child**
 
