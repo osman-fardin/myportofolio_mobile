@@ -267,3 +267,21 @@ FormState.reset memulihkan field, termasuk dropdown dan FormField<DateTime>,
 sedangkan state kategori yang dipakai ringkasan ikut dikembalikan ke default.
 Pembatalan tidak mengubah draft. Reset hanya memengaruhi isian lokal dan tidak
 menghapus data portofolio.
+
+## 17. Memahami refleksi dan memeriksa hasil Tugas 8
+
+**Prompt (ringkasan):**
+
+> Jelasin empat refleksi Tugas 8 berdasarkan kode yang sudah ada: navigasi,
+> struktur halaman dan tema, layout saat layar sempit, serta alur validasi
+> Simpan. Bantu cocokkan jawabannya dengan test dan pisahkan hasil kerja ini
+> menjadi commit per fitur.
+
+**Hasil penggunaan:**
+
+AI menjelaskan hubungan stack navigasi, drawer bersama, dan tema antarhalaman.
+Penjelasan form membedakan bantuan keyboard/picker dari aturan validasi, serta
+menghubungkan GlobalKey, validator, validate, dan onSaved dengan dialog hasil.
+Test membuktikan perilaku valid/invalid, pembatalan picker, layout, dan reset.
+Perubahan dipisahkan menjadi patch per checkpoint agar dapat direview dan
+di-commit secara bertahap.

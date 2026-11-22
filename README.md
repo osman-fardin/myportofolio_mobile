@@ -107,6 +107,13 @@ Pengisian dengan keyboard, dropdown jenis bebas, ringkasan, dan reset setelah
 OK dicoba; console yang diperiksa mencatat nol error/warning. Font, renderer,
 dan gambar pada sesi ini termuat lokal. Build native belum diverifikasi.
 
+Build web Tugas 8 berhasil dengan perintah yang sama. Chrome diperiksa pada
+lebar 320, 390, dan 1280 px untuk navigasi kartu/drawer/Home, browser Back,
+input invalid lalu diperbaiki, dialog ringkasan, picker tanggal/jam, serta
+reset batal/setuju. Screenshot ditinjau setelah layout selesai diperbarui.
+Console mencatat nol error/warning; 15 request bundle/aset lokal berhasil.
+Tidak ada klaim build atau pengujian Android, iOS, maupun desktop native.
+
 ## Development Progress
 
 Proyek telah diinisialisasi pada commit `3d432c5`. Halaman utama dipisahkan ke
@@ -130,7 +137,7 @@ belum diverifikasi.
 | Tugas 8, 22 November 2026 | Validasi pada `c8a3dcf`, form Experience/picker/dialog, kartu keempat, drawer bersama dan reset dengan konfirmasi; total 64 test. |
 
 Warna disimpan pada model ItemHomepage dan diterapkan langsung oleh ItemCard.
-Palet navy `#23354D`, cloud `#526F7A`, dan copper `#B6643D` berasal dari
+Palet navy `#23354D`, cloud `#526F7A`, walnut `#51372A`, dan copper `#B6643D` berasal dari
 [stylesheet web portofolio](https://github.com/osman-fardin/myportofolio/blob/main/static/css/style.css).
 Teks/ikon hitam atau putih dipilih berdasarkan rasio kontras terhadap warna
 kartu. Test memeriksa rasio label minimal 4.5:1; ini tidak menyatakan seluruh
@@ -169,7 +176,7 @@ Menekan OK mereset seluruh input dan pilihan. Menutup dialog dengan Back atau
 klik di luar dialog mempertahankan draft. Pola Form/GlobalKey mengacu pada
 [panduan validasi Flutter](https://docs.flutter.dev/cookbook/forms/validation).
 
-## Experience Form Progress
+## Experience Form
 
 Aturan input Experience dipisahkan dari widget. Form mengacu pada model backend:
 `title`, `description`, `category`, `thumbnail`, `started_at`, dan `ended_at`.
@@ -382,6 +389,73 @@ dicatat pada Development Progress dan Project Form.
    Jika hot reload ditolak karena kesalahan kompilasi, kode perlu diperbaiki
    terlebih dahulu. Rujukan: [hot reload Flutter](https://docs.flutter.dev/tools/hot-reload).
 
+### Tugas 8
+
+1. **Navigasi kartu, drawer, dan kembali**
+
+   `Navigator.push()` menambahkan route ke atas stack, sedangkan
+   `pushReplacement()` mengganti route paling atas. `pop()` menghapus route
+   teratas, misalnya untuk kembali dari form atau menutup dialog. Kartu
+   Tambah Pengalaman memakai `push()` dengan MaterialPageRoute, sehingga
+   tombol Back kembali ke instance Home sebelumnya.
+
+   Drawer dipakai bersama pada Home, Project, dan Experience. Opsi Home
+   menutup drawer lalu memakai `pushReplacement()` untuk menampilkan
+   MyHomePage. Alur ini juga dapat dipakai di Chrome. Memilih tujuan yang
+   sedang aktif hanya menutup drawer agar draft tidak hilang.
+   `pushReplacement()` tetap menyisakan route di bawahnya; contoh alur
+   campuran dijelaskan pada bagian Navigation. Rujukan:
+   [navigasi Flutter](https://docs.flutter.dev/cookbook/navigation/navigation-basics).
+
+2. **Struktur halaman dan tema bersama**
+
+   `Scaffold` menyediakan kerangka halaman, `AppBar` memberi judul dan akses
+   navigasi, sedangkan `LeftDrawer` menyediakan tujuan yang sama di setiap
+   halaman. Form Experience memakai komponen drawer yang sama dengan Home
+   dan form Project. Penambahan tujuan dilakukan pada satu komponen bersama.
+
+   Semua halaman menerima PortfolioTheme.light dari MaterialApp. Contohnya,
+   latar paper `#F7F4F0` dipakai pada Home, Project, dan Experience. Permukaan
+   input tetap putih, teks memakai warna ink/walnut, dan tombol Simpan
+   Experience serta header drawer memakai navy `#23354D`. Ini menjaga
+   hubungan visual dengan portofolio web tanpa menyalin warna pada setiap
+   widget secara terpisah.
+
+3. **Alasan pemilihan layout formulir**
+
+   Form memakai Column satu arah karena judul, deskripsi, kategori, URL, dan
+   waktu lebih mudah diisi berurutan. ConstrainedBox membatasi lebar konten
+   menjadi 720 piksel pada layar lebar. Padding memberi ruang dari tepi
+   layar, sedangkan SizedBox memisahkan field dan tombol agar tidak rapat.
+
+   SingleChildScrollView membuat semua input, Simpan, dan Reset formulir
+   dapat dijangkau ketika layar sempit atau keyboard muncul. Scaffold tetap
+   menyesuaikan body terhadap keyboard. Tombol pada field tanggal memakai
+   Wrap agar dapat turun baris, dan isi dialog juga dapat digulir ketika
+   deskripsi panjang. Test memeriksa layar 320 piksel dengan teks 200% serta
+   layar 390 piksel dengan viewInsets keyboard 300 piksel.
+
+4. **Validasi saat Simpan dan keterbatasan jenis input**
+
+   GlobalKey<FormState> dibuat sekali dalam State agar tombol Simpan dapat
+   mengakses form yang sama. `validate()` menjalankan validator setiap
+   field. Validator mengembalikan pesan saat input salah dan `null` saat
+   valid. Hanya jika semua lolos, form menjalankan `save()`/onSaved lalu
+   menampilkan snapshot seluruh isian dalam AlertDialog.
+
+   Contoh nilai yang ditolak adalah judul yang hanya berisi spasi, judul
+   melebihi 255 karakter, thumbnail `javascript:alert(1)`, serta waktu selesai
+   09.29 ketika mulai 09.30 pada tanggal yang sama. TextInputType.url hanya
+   membantu susunan keyboard; pengguna tetap bisa menempelkan teks yang
+   salah. Picker tanggal/jam juga tidak menjamin urutan dua field benar.
+   Karena itu ExperienceValidation memeriksa isi dan hubungan nilainya.
+
+   DateTimeFormField baru mengubah nilai setelah kedua picker dikonfirmasi.
+   Saat mulai berubah, validator akhir dijalankan ulang. Waktu akhir kosong
+   tetap valid karena berarti masih berlangsung. Rujukan:
+   [form dan validasi](https://docs.flutter.dev/cookbook/forms/validation),
+   [perubahan nilai FormField](https://api.flutter.dev/flutter/widgets/FormFieldState/didChange.html).
+
 ## AI Disclosure
 
 Saya menggunakan OpenAI Codex untuk penjelasan konsep, penyiapan proyek,
@@ -402,3 +476,16 @@ dengan perilaku nyata, sumber proyek, dan pilihan desain saya. Test serta
 pemeriksaan Chrome membantu verifikasi lokal, bukan menjamin seluruh platform
 sudah diuji atau tugas sudah dikumpulkan. Commit, push, merge, dan pengumpulan
 saya jalankan sendiri.
+
+Pada Tugas 8, Codex juga membantu memetakan model Experience, menulis validator,
+form/picker, navigasi, reset dengan konfirmasi, test, serta draf refleksi.
+Saya membatasi pekerjaan per perilaku sebelum meminta penyelesaian seluruh
+checkpoint. Test picker memakai dialog tanggal dan jam asli, bukan sekadar
+mengubah state dari test. Ini membantu memeriksa pembatalan dan revalidasi
+waktu akhir yang tidak cukup dibuktikan oleh unit test validator saja.
+
+Salah satu asumsi test awal perlu dikoreksi: sesudah menggulir drawer dengan
+teks besar, posisi widget harus selesai diperbarui sebelum tap. Perbaikannya
+ada pada sinkronisasi test, bukan menyembunyikan kegagalan tap. Validasi lokal
+juga hanya memeriksa input yang direncanakan untuk form; ia tidak menggantikan
+pembersihan HTML, permission, validasi server, atau pengujian platform native.
