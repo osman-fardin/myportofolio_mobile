@@ -13,13 +13,16 @@ mata kuliah Pemrograman Berbasis Platform. Proyek ini dikembangkan terpisah dari
 ## Features
 
 - Kartu informasi pemilik portofolio dan pesan sambutan.
-- Tiga kartu aksi: Lihat Proyek, Tambah Proyek, dan Logout dengan feedback SnackBar.
-- Warna aksi berbeda mengikuti palet web: navy, cloud, dan copper.
+- Empat kartu aksi: Lihat Proyek, Tambah Proyek, Tambah Pengalaman, dan Logout.
+- Feedback SnackBar dan warna aksi berbeda: navy, cloud, walnut, dan copper.
 - Tampilan mengikuti web: latar paper, Space Grotesk, header bergaris, dan panel About.
 - Foto, tekstur latar, serta font tersedia sebagai aset lokal.
 - Layout yang dapat digulir, dukungan teks diperbesar, dan aktivasi menu melalui keyboard.
-- Drawer Home/Tambah Proyek pada kedua halaman dan navigasi dari kartu Tambah Proyek.
+- Drawer bersama dengan Home, Tambah Proyek, dan Tambah Pengalaman.
 - Form proyek dengan validasi, dialog ringkasan, dan reset setelah konfirmasi.
+- Form Experience dengan enam field, pemilih tanggal/jam, dan ringkasan lokal,
+  dapat dibuka melalui kartu serta drawer.
+- Reset draft Experience dengan konfirmasi; pembatalan mempertahankan isian.
 
 ## Technology
 
@@ -55,6 +58,9 @@ flutter run -d chrome
 - `lib/main.dart`: titik masuk, pemilihan tema, dan pendaftaran lisensi font.
 - `lib/screens/menu.dart`: halaman utama dan InfoCard.
 - `lib/screens/project_form.dart`: formulir proyek dan pratinjau input lokal.
+- `lib/screens/experience_form.dart`: formulir pengalaman dan dialog ringkasan.
+- `lib/forms/experience_validation.dart`: aturan validasi input Experience.
+- `lib/widgets/date_time_form_field.dart`: field tanggal/jam yang mengikuti siklus Form.
 - `lib/widgets/project_card.dart`: model ItemHomepage dan widget ItemCard.
 - `lib/widgets/left_drawer.dart`: drawer bersama dan pemilihan halaman tujuan.
 - `lib/theme/portfolio_theme.dart`: warna dan konfigurasi tema bersama.
@@ -73,15 +79,24 @@ flutter test
 dart format --output=none --set-exit-if-changed lib test
 ```
 
-Verifikasi terakhir: 31 widget test lulus, analisis statis dan format bersih.
-Test mencakup isi kartu, layout dan teks 200%, pesan ketiga aksi, tap berulang,
+Verifikasi terakhir: 64 test lulus (49 widget test dan 15 unit test validasi
+Experience), analisis statis dan format bersih.
+Test mencakup isi kartu, layout dan teks 200%, pesan keempat aksi, tap berulang,
 keyboard, warna unik, serta kontras teks/ikon pada warna terang dan gelap.
 Test juga memeriksa perubahan susunan kartu dan keterjangkauan About/footer.
-Sebelas test form mencakup input wajib, batas panjang, URL, urutan tampilan,
+Sebelas test form Project mencakup input wajib, batas panjang, URL, urutan tampilan,
 jenis bebas, ringkasan, reset, pembatalan dialog, dan layar 320 px/teks 200%.
-Lima test navigasi memeriksa Back dari kartu, pergantian halaman melalui drawer,
+Delapan test navigasi memeriksa Back dari kartu, pergantian halaman melalui drawer,
 pilihan halaman aktif tanpa kehilangan draft, riwayat campuran, serta drawer
 pada layar 320 px/teks 200%. Test keyboard memperhitungkan tombol drawer baru.
+Test validasi Experience memeriksa teks wajib, batas judul 255 karakter Unicode,
+enam kategori backend, thumbnail opsional/HTTP(S)/maksimal 200 karakter, serta
+urutan tanggal dan jam termasuk perbandingan offset zona waktu.
+Empat belas widget test Experience memeriksa validasi form, seluruh nilai dialog,
+pembatalan picker, revalidasi waktu selesai, penghapusan waktu akhir, draft,
+layar 320 px/teks 200%, serta tinggi layar yang berkurang karena keyboard.
+Reset diuji pada jalur batal/setuju, termasuk seluruh teks, kategori, waktu,
+error validasi, dan submit sesudah reset.
 Pada checkpoint Tugas 7, interaksi dan tampilan Chrome diperiksa pada lebar
 320, 390, 768, dan 1280 px. Build web saat itu berhasil menggunakan
 `flutter build web --no-web-resources-cdn`;
@@ -92,6 +107,13 @@ Pengisian dengan keyboard, dropdown jenis bebas, ringkasan, dan reset setelah
 OK dicoba; console yang diperiksa mencatat nol error/warning. Font, renderer,
 dan gambar pada sesi ini termuat lokal. Build native belum diverifikasi.
 
+Build web Tugas 8 berhasil dengan perintah yang sama. Chrome diperiksa pada
+lebar 320, 390, dan 1280 px untuk navigasi kartu/drawer/Home, browser Back,
+input invalid lalu diperbaiki, dialog ringkasan, picker tanggal/jam, serta
+reset batal/setuju. Screenshot ditinjau setelah layout selesai diperbarui.
+Console mencatat nol error/warning; 15 request bundle/aset lokal berhasil.
+Tidak ada klaim build atau pengujian Android, iOS, maupun desktop native.
+
 ## Development Progress
 
 Proyek telah diinisialisasi pada commit `3d432c5`. Halaman utama dipisahkan ke
@@ -99,9 +121,9 @@ menu.dart sebagai StatelessWidget, dengan tema Material 3.
 Halaman menampilkan tiga InfoCard (NPM, Name, Class) dengan identitas Muhammad
 Osman Fardin, NPM 2506541723, kelas PBP D. Intro dan About memakai isi profil
 serta gaya web yang sama. Grid aksi menjadi satu kolom pada layar sempit atau
-teks besar, dan tiga kolom pada layar lebar. Setiap aksi menampilkan pesan
-melalui SnackBar. Kartu Tambah Proyek membuka form; drawer menghubungkan Home
-dan form. Lihat Proyek dan Logout masih berupa feedback SnackBar. Form belum
+teks besar, dua kolom pada lebar menengah, dan empat pada layar lebar. Setiap aksi menampilkan pesan
+melalui SnackBar. Kartu Tambah Proyek dan Tambah Pengalaman membuka form masing-masing;
+drawer menghubungkan ketiga halaman. Lihat Proyek dan Logout masih berupa feedback SnackBar. Form belum
 menyimpan data. Integrasi API belum diterapkan; build Android, iOS, dan desktop
 belum diverifikasi.
 
@@ -112,9 +134,10 @@ belum diverifikasi.
 | Tutorial 08, 11 November 2026 | Halaman utama, identitas, tiga kartu aksi, SnackBar, dan widget test; PR #1 merged pada checkpoint `e642989`. |
 | Tugas 7, 14–15 November 2026 | Warna kartu pada `050626a`, adaptasi UI web pada `9bf2248`, 15 widget test, serta enam refleksi pada README ini. |
 | Tutorial 09, 17 November 2026 | Material UI pada `c882558`, pemisahan screen/widget pada `07e3c0c`, form pada `d8ad32c`, serta drawer/navigasi dengan total 31 test. |
+| Tugas 8, 22 November 2026 | Validasi pada `c8a3dcf`, form Experience/picker/dialog, kartu keempat, drawer bersama dan reset dengan konfirmasi; total 64 test. |
 
 Warna disimpan pada model ItemHomepage dan diterapkan langsung oleh ItemCard.
-Palet navy `#23354D`, cloud `#526F7A`, dan copper `#B6643D` berasal dari
+Palet navy `#23354D`, cloud `#526F7A`, walnut `#51372A`, dan copper `#B6643D` berasal dari
 [stylesheet web portofolio](https://github.com/osman-fardin/myportofolio/blob/main/static/css/style.css).
 Teks/ikon hitam atau putih dipilih berdasarkan rasio kontras terhadap warna
 kartu. Test memeriksa rasio label minimal 4.5:1; ini tidak menyatakan seluruh
@@ -153,12 +176,40 @@ Menekan OK mereset seluruh input dan pilihan. Menutup dialog dengan Back atau
 klik di luar dialog mempertahankan draft. Pola Form/GlobalKey mengacu pada
 [panduan validasi Flutter](https://docs.flutter.dev/cookbook/forms/validation).
 
+## Experience Form
+
+Aturan input Experience dipisahkan dari widget. Form mengacu pada model backend:
+`title`, `description`, `category`, `thumbnail`, `started_at`, dan `ended_at`.
+Kategori mengikuti enam pilihan backend dengan nilai awal `full-time`.
+Judul dan deskripsi wajib berisi teks; judul dibatasi 255 karakter. Thumbnail
+opsional diperiksa sebagai URL HTTP(S), maksimal 200 karakter. Waktu mulai
+wajib, sedangkan waktu selesai boleh kosong untuk pengalaman yang masih
+berlangsung. Waktu selesai yang lebih awal ditolak; waktu yang sama diterima.
+
+ExperienceFormPage memakai StatefulWidget, Form, dan GlobalKey<FormState>.
+Simpan memvalidasi seluruh field sebelum menampilkan semua isian dalam dialog.
+OK atau pembatalan dialog mempertahankan draft untuk dikoreksi. Picker tanggal
+diikuti picker jam; membatalkan salah satunya tidak mengubah nilai lama. Nilai
+awal mulai mengikuti waktu sekarang, dan waktu selesai dapat dihapus kembali
+menjadi Masih berlangsung. Perubahan mulai memvalidasi ulang waktu selesai.
+Tanggal/jam ditampilkan dalam zona waktu perangkat, dengan ketelitian menit.
+Reset formulir meminta konfirmasi. Batal mempertahankan draft; Reset membersihkan
+teks/error, mengembalikan kategori ke Full-Time, waktu mulai ke nilai awal saat
+halaman dibuka, dan waktu selesai menjadi kosong. Fitur ini hanya mengubah draft.
+
+Komponen DateTimeFormField menggabungkan hasil [showDatePicker](https://pub.dev/documentation/material_ui/latest/material_ui/showDatePicker.html)
+dan [showTimePicker](https://pub.dev/documentation/material_ui/latest/material_ui/showTimePicker.html)
+sebelum memperbarui nilai FormField. Data belum dikirim ke API. Validasi lokal
+tidak menggantikan pembersihan teks, validasi, dan permission backend.
+
 ## Navigation
 
-Drawer tersedia di Home dan form. Memilih halaman aktif cukup menutup drawer,
+Drawer yang sama tersedia di Home, form Project, dan form Experience.
+Memilih halaman aktif cukup menutup drawer,
 sehingga draft tidak hilang. Berpindah ke tujuan lain menutup drawer dan
 memakai `pushReplacement`; kartu Tambah Proyek menampilkan SnackBar lalu
-memakai `push`. Form yang dibuka dari kartu menyediakan tombol Back dan drawer.
+memakai `push`, begitu pula kartu Tambah Pengalaman. Kedua form menyediakan
+tombol Back saat dibuka dari kartu, serta drawer untuk kembali ke Home.
 
 | Alur | Hasil riwayat |
 | --- | --- |
@@ -338,6 +389,73 @@ dicatat pada Development Progress dan Project Form.
    Jika hot reload ditolak karena kesalahan kompilasi, kode perlu diperbaiki
    terlebih dahulu. Rujukan: [hot reload Flutter](https://docs.flutter.dev/tools/hot-reload).
 
+### Tugas 8
+
+1. **Navigasi kartu, drawer, dan kembali**
+
+   `Navigator.push()` menambahkan route ke atas stack, sedangkan
+   `pushReplacement()` mengganti route paling atas. `pop()` menghapus route
+   teratas, misalnya untuk kembali dari form atau menutup dialog. Kartu
+   Tambah Pengalaman memakai `push()` dengan MaterialPageRoute, sehingga
+   tombol Back kembali ke instance Home sebelumnya.
+
+   Drawer dipakai bersama pada Home, Project, dan Experience. Opsi Home
+   menutup drawer lalu memakai `pushReplacement()` untuk menampilkan
+   MyHomePage. Alur ini juga dapat dipakai di Chrome. Memilih tujuan yang
+   sedang aktif hanya menutup drawer agar draft tidak hilang.
+   `pushReplacement()` tetap menyisakan route di bawahnya; contoh alur
+   campuran dijelaskan pada bagian Navigation. Rujukan:
+   [navigasi Flutter](https://docs.flutter.dev/cookbook/navigation/navigation-basics).
+
+2. **Struktur halaman dan tema bersama**
+
+   `Scaffold` menyediakan kerangka halaman, `AppBar` memberi judul dan akses
+   navigasi, sedangkan `LeftDrawer` menyediakan tujuan yang sama di setiap
+   halaman. Form Experience memakai komponen drawer yang sama dengan Home
+   dan form Project. Penambahan tujuan dilakukan pada satu komponen bersama.
+
+   Semua halaman menerima PortfolioTheme.light dari MaterialApp. Contohnya,
+   latar paper `#F7F4F0` dipakai pada Home, Project, dan Experience. Permukaan
+   input tetap putih, teks memakai warna ink/walnut, dan tombol Simpan
+   Experience serta header drawer memakai navy `#23354D`. Ini menjaga
+   hubungan visual dengan portofolio web tanpa menyalin warna pada setiap
+   widget secara terpisah.
+
+3. **Alasan pemilihan layout formulir**
+
+   Form memakai Column satu arah karena judul, deskripsi, kategori, URL, dan
+   waktu lebih mudah diisi berurutan. ConstrainedBox membatasi lebar konten
+   menjadi 720 piksel pada layar lebar. Padding memberi ruang dari tepi
+   layar, sedangkan SizedBox memisahkan field dan tombol agar tidak rapat.
+
+   SingleChildScrollView membuat semua input, Simpan, dan Reset formulir
+   dapat dijangkau ketika layar sempit atau keyboard muncul. Scaffold tetap
+   menyesuaikan body terhadap keyboard. Tombol pada field tanggal memakai
+   Wrap agar dapat turun baris, dan isi dialog juga dapat digulir ketika
+   deskripsi panjang. Test memeriksa layar 320 piksel dengan teks 200% serta
+   layar 390 piksel dengan viewInsets keyboard 300 piksel.
+
+4. **Validasi saat Simpan dan keterbatasan jenis input**
+
+   GlobalKey<FormState> dibuat sekali dalam State agar tombol Simpan dapat
+   mengakses form yang sama. `validate()` menjalankan validator setiap
+   field. Validator mengembalikan pesan saat input salah dan `null` saat
+   valid. Hanya jika semua lolos, form menjalankan `save()`/onSaved lalu
+   menampilkan snapshot seluruh isian dalam AlertDialog.
+
+   Contoh nilai yang ditolak adalah judul yang hanya berisi spasi, judul
+   melebihi 255 karakter, thumbnail `javascript:alert(1)`, serta waktu selesai
+   09.29 ketika mulai 09.30 pada tanggal yang sama. TextInputType.url hanya
+   membantu susunan keyboard; pengguna tetap bisa menempelkan teks yang
+   salah. Picker tanggal/jam juga tidak menjamin urutan dua field benar.
+   Karena itu ExperienceValidation memeriksa isi dan hubungan nilainya.
+
+   DateTimeFormField baru mengubah nilai setelah kedua picker dikonfirmasi.
+   Saat mulai berubah, validator akhir dijalankan ulang. Waktu akhir kosong
+   tetap valid karena berarti masih berlangsung. Rujukan:
+   [form dan validasi](https://docs.flutter.dev/cookbook/forms/validation),
+   [perubahan nilai FormField](https://api.flutter.dev/flutter/widgets/FormFieldState/didChange.html).
+
 ## AI Disclosure
 
 Saya menggunakan OpenAI Codex untuk penjelasan konsep, penyiapan proyek,
@@ -358,3 +476,16 @@ dengan perilaku nyata, sumber proyek, dan pilihan desain saya. Test serta
 pemeriksaan Chrome membantu verifikasi lokal, bukan menjamin seluruh platform
 sudah diuji atau tugas sudah dikumpulkan. Commit, push, merge, dan pengumpulan
 saya jalankan sendiri.
+
+Pada Tugas 8, Codex juga membantu memetakan model Experience, menulis validator,
+form/picker, navigasi, reset dengan konfirmasi, test, serta draf refleksi.
+Saya membatasi pekerjaan per perilaku sebelum meminta penyelesaian seluruh
+checkpoint. Test picker memakai dialog tanggal dan jam asli, bukan sekadar
+mengubah state dari test. Ini membantu memeriksa pembatalan dan revalidasi
+waktu akhir yang tidak cukup dibuktikan oleh unit test validator saja.
+
+Salah satu asumsi test awal perlu dikoreksi: sesudah menggulir drawer dengan
+teks besar, posisi widget harus selesai diperbarui sebelum tap. Perbaikannya
+ada pada sinkronisasi test, bukan menyembunyikan kegagalan tap. Validasi lokal
+juga hanya memeriksa input yang direncanakan untuk form; ia tidak menggantikan
+pembersihan HTML, permission, validasi server, atau pengujian platform native.

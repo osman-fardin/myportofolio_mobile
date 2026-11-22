@@ -13,6 +13,11 @@ class MyHomePage extends StatelessWidget {
   final List<ItemHomepage> items = const [
     ItemHomepage('Lihat Proyek', Icons.folder, PortfolioColors.navy),
     ItemHomepage('Tambah Proyek', Icons.add_circle, PortfolioColors.cloud),
+    ItemHomepage(
+      'Tambah Pengalaman',
+      Icons.work_outline,
+      PortfolioColors.walnut,
+    ),
     ItemHomepage('Logout', Icons.logout, PortfolioColors.copper),
   ];
 
@@ -61,9 +66,12 @@ class MyHomePage extends StatelessWidget {
                       const SizedBox(height: 16),
                       LayoutBuilder(
                         builder: (context, constraints) {
-                          final columns =
-                              constraints.maxWidth >= 720 && textScale < 1.5
-                              ? 3
+                          final columns = textScale >= 1.5
+                              ? 1
+                              : constraints.maxWidth >= 1000
+                              ? 4
+                              : constraints.maxWidth >= 720
+                              ? 2
                               : 1;
                           return GridView.count(
                             primary: false,

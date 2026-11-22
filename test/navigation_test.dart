@@ -3,6 +3,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:myportofolio_mobile/main.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
+import 'package:myportofolio_mobile/screens/experience_form.dart';
 import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
 
@@ -21,6 +22,7 @@ Future<void> chooseDestination(WidgetTester tester, String label) async {
       matching: find.byType(Scrollable),
     ),
   );
+  await tester.pumpAndSettle();
   await tester.tap(tile);
   await tester.pumpAndSettle();
 }
@@ -29,6 +31,85 @@ NavigatorState navigator(WidgetTester tester) =>
     tester.state<NavigatorState>(find.byType(Navigator));
 
 void main() {
+  testWidgets('Experience card pushes a form with Back and its own SnackBar', (
+    tester,
+  ) async {
+    await tester.pumpWidget(const MyApp());
+    final home = tester.element(find.byType(MyHomePage));
+    final card = find.widgetWithText(ItemCard, 'Tambah Pengalaman');
+    await tester.ensureVisible(card);
+    await tester.tap(card);
+    await tester.pumpAndSettle();
+    expect(find.byType(ExperienceFormPage), findsOneWidget);
+    expect(
+      find.text('Kamu telah menekan tombol Tambah Pengalaman!'),
+      findsOneWidget,
+    );
+    expect(navigator(tester).canPop(), isTrue);
+    await tester.tap(find.byType(BackButton));
+    await tester.pumpAndSettle();
+    expect(tester.element(find.byType(MyHomePage)), same(home));
+  });
+
+  testWidgets(
+    'The shared drawer connects all three destinations and preserves an active Experience draft',
+    (tester) async {
+      await tester.pumpWidget(const MyApp());
+      for (final label in [
+        'Tambah Pengalaman',
+        'Tambah Proyek',
+        'Tambah Pengalaman',
+      ]) {
+        await openDrawer(tester);
+        expect(find.widgetWithText(ListTile, 'Home'), findsOneWidget);
+        expect(find.widgetWithText(ListTile, 'Tambah Proyek'), findsOneWidget);
+        expect(
+          find.widgetWithText(ListTile, 'Tambah Pengalaman'),
+          findsOneWidget,
+        );
+        await chooseDestination(tester, label);
+        expect(navigator(tester).canPop(), isFalse);
+      }
+      final originalForm = tester.state(find.byType(ExperienceFormPage));
+      await tester.enterText(
+        find.byKey(const ValueKey('experience-title')),
+        'Draft pengalaman',
+      );
+      await openDrawer(tester);
+      await chooseDestination(tester, 'Tambah Pengalaman');
+      expect(tester.state(find.byType(ExperienceFormPage)), same(originalForm));
+      expect(find.text('Draft pengalaman'), findsOneWidget);
+      await openDrawer(tester);
+      await chooseDestination(tester, 'Home');
+      expect(find.byType(MyHomePage), findsOneWidget);
+      expect(
+        find.byType(ExperienceFormPage, skipOffstage: false),
+        findsNothing,
+      );
+      expect(navigator(tester).canPop(), isFalse);
+      expect(tester.takeException(), isNull);
+    },
+  );
+
+  testWidgets('Experience drawer remains reachable at 320px with 200% text', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(320, 568);
+    tester.platformDispatcher.textScaleFactorTestValue = 2;
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await tester.pumpWidget(const MyApp());
+    await openDrawer(tester);
+    await chooseDestination(tester, 'Tambah Pengalaman');
+    expect(find.byType(ExperienceFormPage), findsOneWidget);
+    await openDrawer(tester);
+    await chooseDestination(tester, 'Home');
+    expect(find.byType(MyHomePage), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('Add card pushes a form; Back returns to the same Home', (
     tester,
   ) async {

@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:myportofolio_mobile/main.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
+import 'package:myportofolio_mobile/screens/experience_form.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
 import 'package:myportofolio_mobile/widgets/portfolio_sections.dart';
 
@@ -107,7 +108,12 @@ void main() {
     );
   }
 
-  for (final name in ['Lihat Proyek', 'Tambah Proyek', 'Logout']) {
+  for (final name in [
+    'Lihat Proyek',
+    'Tambah Proyek',
+    'Tambah Pengalaman',
+    'Logout',
+  ]) {
     testWidgets('$name displays its own SnackBar message', (tester) async {
       await tester.pumpWidget(const MyApp());
 
@@ -121,6 +127,8 @@ void main() {
       expect(find.text('Kamu telah menekan tombol $name!'), findsOneWidget);
       if (name == 'Tambah Proyek') {
         expect(find.byType(ProjectFormPage), findsOneWidget);
+      } else if (name == 'Tambah Pengalaman') {
+        expect(find.byType(ExperienceFormPage), findsOneWidget);
       } else {
         expect(
           find.widgetWithText(AppBar, 'Muhammad Osman Fardin'),
@@ -141,8 +149,12 @@ void main() {
 
     await tester.tap(find.text('Lihat Proyek'));
     await tester.pump(const Duration(milliseconds: 100));
+    await tester.ensureVisible(find.text('Logout'));
+    await tester.pump();
     await tester.tap(find.text('Logout'));
     await tester.pump(const Duration(milliseconds: 50));
+    await tester.ensureVisible(find.text('Lihat Proyek'));
+    await tester.pump();
     await tester.tap(find.text('Lihat Proyek'));
     await tester.pumpAndSettle();
 

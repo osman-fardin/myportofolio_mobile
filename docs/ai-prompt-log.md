@@ -1,8 +1,8 @@
 # AI Prompt Log
 
 Dokumen ini berisi beberapa contoh prompt yang mewakili penggunaan OpenAI Codex
-selama Tutorial 08, Tugas 7, dan Tutorial 09. Prompt diringkas dari percakapan agar lebih
-mudah dibaca, bukan transkrip literal. Selain penjelasan konsep, Codex juga
+selama Tutorial 08, Tugas 7, Tutorial 09, dan Tugas 8. Prompt diringkas dari
+percakapan agar lebih mudah dibaca, bukan transkrip literal. Selain penjelasan konsep, Codex juga
 membantu menyunting kode dan dokumentasi serta menjalankan pengujian.
 Commit, push, merge, dan pengumpulan saya lakukan sendiri.
 
@@ -201,3 +201,87 @@ memilih tujuan yang sama hanya menutup drawer. Karena route di bawahnya tidak
 ikut dihapus, gabungan navigasi kartu dan drawer dapat menyisakan Home lama
 untuk dikunjungi lewat Back. Kartu tetap memberi feedback SnackBar sebelum
 membuka form, dan form menyediakan akses Back serta drawer.
+
+## 13. Memahami aturan input pengalaman
+
+**Prompt (ringkasan):**
+
+> Untuk form pengalaman, aturan apa saja yang perlu mengikuti model Django-ku?
+> Jelasin field wajib, kategori, thumbnail opsional, dan perbandingan waktu
+> mulai/selesai. Bisa dipisahkan dari widget supaya lebih mudah diuji?
+
+**Hasil penggunaan:**
+
+AI menjelaskan pemetaan field Experience ke aturan input lokal. Enam nilai
+kategori mengikuti backend, sedangkan waktu selesai yang kosong berarti
+pengalaman masih berlangsung. Perbandingan tanggal juga memperhatikan jam,
+bukan hanya hari. Fungsi validasi dipisahkan dari tampilan agar batas teks,
+URL, serta urutan waktu dapat diuji tanpa membuka halaman. Backend tetap
+memvalidasi dan memeriksa permission saat integrasi API diterapkan nanti.
+
+## 14. Memahami field tanggal dan jam pada form
+
+**Prompt (ringkasan):**
+
+> Field Experience-ku DateTime, jadi gimana cara memilih tanggal sekaligus jam?
+> Kalau pengguna membatalkan salah satu picker, nilai sebelumnya jangan hilang.
+> Jelasin juga cara memvalidasi ulang waktu selesai ketika mulai berubah dan
+> menampilkan semua isian setelah Simpan.
+
+**Hasil penggunaan:**
+
+AI menjelaskan penggunaan FormField<DateTime> untuk menggabungkan dua picker
+menjadi satu nilai form. Nilai baru diterapkan setelah tanggal dan jam
+dikonfirmasi, sedangkan pembatalan mempertahankan draft. Validator waktu
+selesai membaca nilai mulai terbaru. Simpan menjalankan validasi dan mengambil
+snapshot isian untuk dialog, sementara OK menutup dialog tanpa menghapus draft.
+
+## 15. Menghubungkan form pengalaman ke navigasi
+
+**Prompt (ringkasan):**
+
+> Cara menambahkan form pengalaman ke kartu dan drawer yang sama gimana?
+> Home sama Tambah Proyek harus tetap ada. Kartu keempat juga menyesuaikan
+> lebar layar, dan kalau memilih halaman aktif draft jangan hilang.
+
+**Hasil penggunaan:**
+
+AI menjelaskan penambahan tujuan navigasi yang eksplisit pada drawer bersama.
+Kartu memakai push agar pengguna dapat kembali ke Home, sementara drawer
+mengganti halaman teratas melalui pushReplacement. Pilihan halaman aktif
+hanya menutup drawer. Susunan empat kartu menjadi satu, dua, atau empat kolom
+sesuai ruang yang tersedia, dengan satu kolom saat teks diperbesar.
+
+## 16. Memahami reset formulir dengan konfirmasi
+
+**Prompt (ringkasan):**
+
+> Kalau ditambah reset form, gimana supaya pengguna tidak kehilangan draft
+> karena salah tekan? Setelah setuju, teks, kategori, tanggal, dan pesan error
+> harus kembali ke nilai awal, bukan cuma mengosongkan kolom teks.
+
+**Hasil penggunaan:**
+
+AI menjelaskan dialog konfirmasi yang mengembalikan keputusan pengguna.
+FormState.reset memulihkan field, termasuk dropdown dan FormField<DateTime>,
+sedangkan state kategori yang dipakai ringkasan ikut dikembalikan ke default.
+Pembatalan tidak mengubah draft. Reset hanya memengaruhi isian lokal dan tidak
+menghapus data portofolio.
+
+## 17. Memahami refleksi dan memeriksa hasil Tugas 8
+
+**Prompt (ringkasan):**
+
+> Jelasin empat refleksi Tugas 8 berdasarkan kode yang sudah ada: navigasi,
+> struktur halaman dan tema, layout saat layar sempit, serta alur validasi
+> Simpan. Bantu cocokkan jawabannya dengan test dan pisahkan hasil kerja ini
+> menjadi commit per fitur.
+
+**Hasil penggunaan:**
+
+AI menjelaskan hubungan stack navigasi, drawer bersama, dan tema antarhalaman.
+Penjelasan form membedakan bantuan keyboard/picker dari aturan validasi, serta
+menghubungkan GlobalKey, validator, validate, dan onSaved dengan dialog hasil.
+Test membuktikan perilaku valid/invalid, pembatalan picker, layout, dan reset.
+Perubahan dipisahkan menjadi patch per checkpoint agar dapat direview dan
+di-commit secara bertahap.
