@@ -1,9 +1,10 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/screens/menu.dart';
+import 'package:myportofolio_mobile/screens/experience_form.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
 import 'package:myportofolio_mobile/theme/portfolio_theme.dart';
 
-enum PortfolioDestination { home, addProject }
+enum PortfolioDestination { home, addProject, addExperience }
 
 class LeftDrawer extends StatelessWidget {
   const LeftDrawer({required this.destination, super.key});
@@ -18,9 +19,11 @@ class LeftDrawer extends StatelessWidget {
     ScaffoldMessenger.of(context).clearSnackBars();
     navigator.pushReplacement(
       MaterialPageRoute<void>(
-        builder: (_) => target == PortfolioDestination.home
-            ? const MyHomePage()
-            : const ProjectFormPage(),
+        builder: (_) => switch (target) {
+          PortfolioDestination.home => const MyHomePage(),
+          PortfolioDestination.addProject => const ProjectFormPage(),
+          PortfolioDestination.addExperience => const ExperienceFormPage(),
+        },
       ),
     );
   }
@@ -92,6 +95,12 @@ class LeftDrawer extends StatelessWidget {
               PortfolioDestination.addProject,
               'Tambah Proyek',
               Icons.add_circle_outline,
+            ),
+            _destinationTile(
+              context,
+              PortfolioDestination.addExperience,
+              'Tambah Pengalaman',
+              Icons.work_outline,
             ),
           ],
         ),

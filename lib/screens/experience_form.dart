@@ -2,6 +2,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/forms/experience_validation.dart';
 import 'package:myportofolio_mobile/theme/portfolio_theme.dart';
 import 'package:myportofolio_mobile/widgets/date_time_form_field.dart';
+import 'package:myportofolio_mobile/widgets/left_drawer.dart';
 
 class ExperienceFormPage extends StatefulWidget {
   const ExperienceFormPage({super.key});
@@ -130,8 +131,18 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
 
   @override
   Widget build(BuildContext context) {
+    final canGoBack = ModalRoute.of(context)?.canPop ?? false;
     return Scaffold(
-      appBar: AppBar(title: const Text('Tambah Pengalaman')),
+      appBar: AppBar(
+        title: const Text(
+          'Tambah Pengalaman',
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+        ),
+        leading: canGoBack ? const BackButton() : const DrawerButton(),
+        actions: [if (canGoBack) const DrawerButton()],
+      ),
+      drawer: const LeftDrawer(destination: PortfolioDestination.addExperience),
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 28),

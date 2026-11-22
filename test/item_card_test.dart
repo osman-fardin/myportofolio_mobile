@@ -18,10 +18,10 @@ void main() {
   ) async {
     await tester.pumpWidget(const MyApp());
     final cards = find.byType(ItemCard);
-    expect(cards, findsNWidgets(3));
+    expect(cards, findsNWidgets(4));
     final backgrounds = <Color>{};
 
-    for (var index = 0; index < 3; index++) {
+    for (var index = 0; index < 4; index++) {
       final card = cards.at(index);
       final item = tester.widget<ItemCard>(card).item;
       final material = tester.widget<Material>(
@@ -43,7 +43,7 @@ void main() {
       expect(icon.color, label.style!.color);
     }
 
-    expect(backgrounds, hasLength(3));
+    expect(backgrounds, hasLength(4));
     expect(tester.takeException(), isNull);
   });
 

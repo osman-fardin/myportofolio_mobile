@@ -235,3 +235,19 @@ menjadi satu nilai form. Nilai baru diterapkan setelah tanggal dan jam
 dikonfirmasi, sedangkan pembatalan mempertahankan draft. Validator waktu
 selesai membaca nilai mulai terbaru. Simpan menjalankan validasi dan mengambil
 snapshot isian untuk dialog, sementara OK menutup dialog tanpa menghapus draft.
+
+## 15. Menghubungkan form pengalaman ke navigasi
+
+**Prompt (ringkasan):**
+
+> Cara menambahkan form pengalaman ke kartu dan drawer yang sama gimana?
+> Home sama Tambah Proyek harus tetap ada. Kartu keempat juga menyesuaikan
+> lebar layar, dan kalau memilih halaman aktif draft jangan hilang.
+
+**Hasil penggunaan:**
+
+AI menjelaskan penambahan tujuan navigasi yang eksplisit pada drawer bersama.
+Kartu memakai push agar pengguna dapat kembali ke Home, sementara drawer
+mengganti halaman teratas melalui pushReplacement. Pilihan halaman aktif
+hanya menutup drawer. Susunan empat kartu menjadi satu, dua, atau empat kolom
+sesuai ruang yang tersedia, dengan satu kolom saat teks diperbesar.

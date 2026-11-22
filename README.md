@@ -13,15 +13,15 @@ mata kuliah Pemrograman Berbasis Platform. Proyek ini dikembangkan terpisah dari
 ## Features
 
 - Kartu informasi pemilik portofolio dan pesan sambutan.
-- Tiga kartu aksi: Lihat Proyek, Tambah Proyek, dan Logout dengan feedback SnackBar.
-- Warna aksi berbeda mengikuti palet web: navy, cloud, dan copper.
+- Empat kartu aksi: Lihat Proyek, Tambah Proyek, Tambah Pengalaman, dan Logout.
+- Feedback SnackBar dan warna aksi berbeda: navy, cloud, walnut, dan copper.
 - Tampilan mengikuti web: latar paper, Space Grotesk, header bergaris, dan panel About.
 - Foto, tekstur latar, serta font tersedia sebagai aset lokal.
 - Layout yang dapat digulir, dukungan teks diperbesar, dan aktivasi menu melalui keyboard.
-- Drawer Home/Tambah Proyek pada kedua halaman dan navigasi dari kartu Tambah Proyek.
+- Drawer bersama dengan Home, Tambah Proyek, dan Tambah Pengalaman.
 - Form proyek dengan validasi, dialog ringkasan, dan reset setelah konfirmasi.
-- Form Experience dengan enam field, pemilih tanggal/jam, dan ringkasan lokal;
-  akses dari Home/drawer belum dihubungkan pada checkpoint form ini.
+- Form Experience dengan enam field, pemilih tanggal/jam, dan ringkasan lokal,
+  dapat dibuka melalui kartu serta drawer.
 
 ## Technology
 
@@ -78,14 +78,14 @@ flutter test
 dart format --output=none --set-exit-if-changed lib test
 ```
 
-Verifikasi terakhir: 57 test lulus (42 widget test dan 15 unit test validasi
+Verifikasi terakhir: 61 test lulus (46 widget test dan 15 unit test validasi
 Experience), analisis statis dan format bersih.
-Test mencakup isi kartu, layout dan teks 200%, pesan ketiga aksi, tap berulang,
+Test mencakup isi kartu, layout dan teks 200%, pesan keempat aksi, tap berulang,
 keyboard, warna unik, serta kontras teks/ikon pada warna terang dan gelap.
 Test juga memeriksa perubahan susunan kartu dan keterjangkauan About/footer.
-Sebelas test form mencakup input wajib, batas panjang, URL, urutan tampilan,
+Sebelas test form Project mencakup input wajib, batas panjang, URL, urutan tampilan,
 jenis bebas, ringkasan, reset, pembatalan dialog, dan layar 320 px/teks 200%.
-Lima test navigasi memeriksa Back dari kartu, pergantian halaman melalui drawer,
+Delapan test navigasi memeriksa Back dari kartu, pergantian halaman melalui drawer,
 pilihan halaman aktif tanpa kehilangan draft, riwayat campuran, serta drawer
 pada layar 320 px/teks 200%. Test keyboard memperhitungkan tombol drawer baru.
 Test validasi Experience memeriksa teks wajib, batas judul 255 karakter Unicode,
@@ -111,9 +111,9 @@ menu.dart sebagai StatelessWidget, dengan tema Material 3.
 Halaman menampilkan tiga InfoCard (NPM, Name, Class) dengan identitas Muhammad
 Osman Fardin, NPM 2506541723, kelas PBP D. Intro dan About memakai isi profil
 serta gaya web yang sama. Grid aksi menjadi satu kolom pada layar sempit atau
-teks besar, dan tiga kolom pada layar lebar. Setiap aksi menampilkan pesan
-melalui SnackBar. Kartu Tambah Proyek membuka form; drawer menghubungkan Home
-dan form. Lihat Proyek dan Logout masih berupa feedback SnackBar. Form belum
+teks besar, dua kolom pada lebar menengah, dan empat pada layar lebar. Setiap aksi menampilkan pesan
+melalui SnackBar. Kartu Tambah Proyek dan Tambah Pengalaman membuka form masing-masing;
+drawer menghubungkan ketiga halaman. Lihat Proyek dan Logout masih berupa feedback SnackBar. Form belum
 menyimpan data. Integrasi API belum diterapkan; build Android, iOS, dan desktop
 belum diverifikasi.
 
@@ -124,7 +124,7 @@ belum diverifikasi.
 | Tutorial 08, 11 November 2026 | Halaman utama, identitas, tiga kartu aksi, SnackBar, dan widget test; PR #1 merged pada checkpoint `e642989`. |
 | Tugas 7, 14–15 November 2026 | Warna kartu pada `050626a`, adaptasi UI web pada `9bf2248`, 15 widget test, serta enam refleksi pada README ini. |
 | Tutorial 09, 17 November 2026 | Material UI pada `c882558`, pemisahan screen/widget pada `07e3c0c`, form pada `d8ad32c`, serta drawer/navigasi dengan total 31 test. |
-| Tugas 8, 22 November 2026 | Validasi pada `c8a3dcf`, form Experience/picker/dialog, serta 11 widget test baru. Navigasi Experience belum dihubungkan. |
+| Tugas 8, 22 November 2026 | Validasi pada `c8a3dcf`, form Experience/picker/dialog, kartu keempat serta navigasi drawer bersama. |
 
 Warna disimpan pada model ItemHomepage dan diterapkan langsung oleh ItemCard.
 Palet navy `#23354D`, cloud `#526F7A`, dan copper `#B6643D` berasal dari
@@ -191,10 +191,12 @@ tidak menggantikan pembersihan teks, validasi, dan permission backend.
 
 ## Navigation
 
-Drawer tersedia di Home dan form. Memilih halaman aktif cukup menutup drawer,
+Drawer yang sama tersedia di Home, form Project, dan form Experience.
+Memilih halaman aktif cukup menutup drawer,
 sehingga draft tidak hilang. Berpindah ke tujuan lain menutup drawer dan
 memakai `pushReplacement`; kartu Tambah Proyek menampilkan SnackBar lalu
-memakai `push`. Form yang dibuka dari kartu menyediakan tombol Back dan drawer.
+memakai `push`, begitu pula kartu Tambah Pengalaman. Kedua form menyediakan
+tombol Back saat dibuka dari kartu, serta drawer untuk kembali ke Home.
 
 | Alur | Hasil riwayat |
 | --- | --- |
