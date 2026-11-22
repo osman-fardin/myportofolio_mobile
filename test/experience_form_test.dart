@@ -84,6 +84,118 @@ Finder dialogText(String value) =>
     find.descendant(of: find.byType(AlertDialog), matching: find.text(value));
 
 void main() {
+  Future<void> requestReset(WidgetTester tester) async {
+    final button = find.widgetWithText(OutlinedButton, 'Reset formulir');
+    await tester.ensureVisible(button);
+    await tester.tap(button);
+    await tester.pumpAndSettle();
+    expect(find.text('Reset formulir?'), findsOneWidget);
+  }
+
+  testWidgets('Cancelling reset retains text, category, and both timestamps', (
+    tester,
+  ) async {
+    await openForm(tester);
+    await fillRequired(tester);
+    await enter(tester, 'thumbnail', 'https://example.com/photo.jpg');
+    final category = find.byKey(const ValueKey('experience-category'));
+    await tester.ensureVisible(category);
+    await tester.tap(category);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Volunteer').last);
+    await tester.pumpAndSettle();
+    final start = DateTime(2026, 11, 1, 8);
+    final end = DateTime(2026, 11, 2, 10);
+    await chooseDateTime(tester, 'Waktu mulai', start);
+    await chooseDateTime(tester, 'Waktu selesai (opsional)', end);
+    await requestReset(tester);
+    await tester.tap(find.widgetWithText(TextButton, 'Batal'));
+    await tester.pumpAndSettle();
+    await save(tester);
+    for (final value in [
+      'Teaching Assistant',
+      'Memandu praktikum.\nMenilai tugas.',
+      'Volunteer',
+      'https://example.com/photo.jpg',
+      formatLocalDateTime(start),
+      formatLocalDateTime(end),
+    ]) {
+      expect(dialogText(value), findsOneWidget);
+    }
+  });
+
+  testWidgets(
+    'Confirmed reset clears text/errors and restores default category and dates',
+    (tester) async {
+      await openForm(tester);
+      final initialStart = dateState(tester, 'Waktu mulai').value;
+      await fillRequired(tester);
+      await enter(tester, 'thumbnail', 'https://example.com/photo.jpg');
+      final category = find.byKey(const ValueKey('experience-category'));
+      await tester.ensureVisible(category);
+      await tester.tap(category);
+      await tester.pumpAndSettle();
+      await tester.tap(find.text('Research').last);
+      await tester.pumpAndSettle();
+      await chooseDateTime(tester, 'Waktu mulai', DateTime(2026, 10, 1, 8));
+      await chooseDateTime(
+        tester,
+        'Waktu selesai (opsional)',
+        DateTime(2026, 9, 1, 8),
+      );
+      expect(
+        find.text('Waktu selesai tidak boleh lebih awal dari waktu mulai.'),
+        findsOneWidget,
+      );
+      await requestReset(tester);
+      await tester.tap(find.widgetWithText(TextButton, 'Reset'));
+      await tester.pumpAndSettle();
+      for (final name in ['title', 'description', 'thumbnail']) {
+        final editor = find.descendant(
+          of: textField(name),
+          matching: find.byType(EditableText),
+        );
+        expect(tester.widget<EditableText>(editor).controller.text, isEmpty);
+      }
+      expect(dateState(tester, 'Waktu mulai').value, initialStart);
+      expect(dateState(tester, 'Waktu selesai (opsional)').value, isNull);
+      expect(tester.state<FormFieldState<String>>(category).value, 'full-time');
+      expect(
+        find.text('Waktu selesai tidak boleh lebih awal dari waktu mulai.'),
+        findsNothing,
+      );
+      await save(tester);
+      expect(find.byType(AlertDialog), findsNothing);
+      expect(find.text('Judul pengalaman tidak boleh kosong.'), findsOneWidget);
+      await fillRequired(tester);
+      await save(tester);
+      expect(dialogText('Full-Time'), findsOneWidget);
+      expect(dialogText('Masih berlangsung'), findsOneWidget);
+      expect(dialogText('Tidak diisi'), findsOneWidget);
+    },
+  );
+
+  testWidgets('Reset confirmation remains usable at 320px and 200% text', (
+    tester,
+  ) async {
+    tester.view.devicePixelRatio = 1;
+    tester.view.physicalSize = const Size(320, 568);
+    tester.platformDispatcher.textScaleFactorTestValue = 2;
+    addTearDown(tester.view.resetDevicePixelRatio);
+    addTearDown(tester.view.resetPhysicalSize);
+    addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
+    await openForm(tester);
+    await fillRequired(tester);
+    await requestReset(tester);
+    final cancel = find.widgetWithText(TextButton, 'Batal');
+    expect(tester.getRect(cancel).bottom, lessThanOrEqualTo(568));
+    await tester.tap(cancel);
+    await tester.pumpAndSettle();
+    await save(tester);
+    expect(dialogText('Teaching Assistant'), findsOneWidget);
+    expect(tester.takeException(), isNull);
+  });
+
   testWidgets('Required fields reject whitespace and block the summary', (
     tester,
   ) async {

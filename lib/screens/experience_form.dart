@@ -129,6 +129,35 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
     );
   }
 
+  Future<void> _confirmReset() async {
+    FocusScope.of(context).unfocus();
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        title: const Text('Reset formulir?'),
+        content: const Text(
+          'Semua isian draft akan dikembalikan ke nilai awal.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, false),
+            child: const Text('Batal'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext, true),
+            child: const Text('Reset'),
+          ),
+        ],
+      ),
+    );
+    if (!mounted || confirmed != true) return;
+
+    // Form.reset juga mereset field tanggal dan error, bukan hanya teks.
+    _formKey.currentState!.reset();
+    _values.clear();
+    _category = ExperienceValidation.defaultCategory;
+  }
+
   @override
   Widget build(BuildContext context) {
     final canGoBack = ModalRoute.of(context)?.canPop ?? false;
@@ -239,6 +268,11 @@ class _ExperienceFormPageState extends State<ExperienceFormPage> {
                         ),
                       ),
                       child: const Text('Simpan'),
+                    ),
+                    const SizedBox(height: 12),
+                    OutlinedButton(
+                      onPressed: _confirmReset,
+                      child: const Text('Reset formulir'),
                     ),
                   ],
                 ),

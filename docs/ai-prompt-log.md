@@ -251,3 +251,19 @@ Kartu memakai push agar pengguna dapat kembali ke Home, sementara drawer
 mengganti halaman teratas melalui pushReplacement. Pilihan halaman aktif
 hanya menutup drawer. Susunan empat kartu menjadi satu, dua, atau empat kolom
 sesuai ruang yang tersedia, dengan satu kolom saat teks diperbesar.
+
+## 16. Memahami reset formulir dengan konfirmasi
+
+**Prompt (ringkasan):**
+
+> Kalau ditambah reset form, gimana supaya pengguna tidak kehilangan draft
+> karena salah tekan? Setelah setuju, teks, kategori, tanggal, dan pesan error
+> harus kembali ke nilai awal, bukan cuma mengosongkan kolom teks.
+
+**Hasil penggunaan:**
+
+AI menjelaskan dialog konfirmasi yang mengembalikan keputusan pengguna.
+FormState.reset memulihkan field, termasuk dropdown dan FormField<DateTime>,
+sedangkan state kategori yang dipakai ringkasan ikut dikembalikan ke default.
+Pembatalan tidak mengubah draft. Reset hanya memengaruhi isian lokal dan tidak
+menghapus data portofolio.

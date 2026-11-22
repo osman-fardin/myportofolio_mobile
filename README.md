@@ -22,6 +22,7 @@ mata kuliah Pemrograman Berbasis Platform. Proyek ini dikembangkan terpisah dari
 - Form proyek dengan validasi, dialog ringkasan, dan reset setelah konfirmasi.
 - Form Experience dengan enam field, pemilih tanggal/jam, dan ringkasan lokal,
   dapat dibuka melalui kartu serta drawer.
+- Reset draft Experience dengan konfirmasi; pembatalan mempertahankan isian.
 
 ## Technology
 
@@ -78,7 +79,7 @@ flutter test
 dart format --output=none --set-exit-if-changed lib test
 ```
 
-Verifikasi terakhir: 61 test lulus (46 widget test dan 15 unit test validasi
+Verifikasi terakhir: 64 test lulus (49 widget test dan 15 unit test validasi
 Experience), analisis statis dan format bersih.
 Test mencakup isi kartu, layout dan teks 200%, pesan keempat aksi, tap berulang,
 keyboard, warna unik, serta kontras teks/ikon pada warna terang dan gelap.
@@ -91,9 +92,11 @@ pada layar 320 px/teks 200%. Test keyboard memperhitungkan tombol drawer baru.
 Test validasi Experience memeriksa teks wajib, batas judul 255 karakter Unicode,
 enam kategori backend, thumbnail opsional/HTTP(S)/maksimal 200 karakter, serta
 urutan tanggal dan jam termasuk perbandingan offset zona waktu.
-Sebelas widget test Experience memeriksa validasi form, seluruh nilai dialog,
+Empat belas widget test Experience memeriksa validasi form, seluruh nilai dialog,
 pembatalan picker, revalidasi waktu selesai, penghapusan waktu akhir, draft,
 layar 320 px/teks 200%, serta tinggi layar yang berkurang karena keyboard.
+Reset diuji pada jalur batal/setuju, termasuk seluruh teks, kategori, waktu,
+error validasi, dan submit sesudah reset.
 Pada checkpoint Tugas 7, interaksi dan tampilan Chrome diperiksa pada lebar
 320, 390, 768, dan 1280 px. Build web saat itu berhasil menggunakan
 `flutter build web --no-web-resources-cdn`;
@@ -124,7 +127,7 @@ belum diverifikasi.
 | Tutorial 08, 11 November 2026 | Halaman utama, identitas, tiga kartu aksi, SnackBar, dan widget test; PR #1 merged pada checkpoint `e642989`. |
 | Tugas 7, 14–15 November 2026 | Warna kartu pada `050626a`, adaptasi UI web pada `9bf2248`, 15 widget test, serta enam refleksi pada README ini. |
 | Tutorial 09, 17 November 2026 | Material UI pada `c882558`, pemisahan screen/widget pada `07e3c0c`, form pada `d8ad32c`, serta drawer/navigasi dengan total 31 test. |
-| Tugas 8, 22 November 2026 | Validasi pada `c8a3dcf`, form Experience/picker/dialog, kartu keempat serta navigasi drawer bersama. |
+| Tugas 8, 22 November 2026 | Validasi pada `c8a3dcf`, form Experience/picker/dialog, kartu keempat, drawer bersama dan reset dengan konfirmasi; total 64 test. |
 
 Warna disimpan pada model ItemHomepage dan diterapkan langsung oleh ItemCard.
 Palet navy `#23354D`, cloud `#526F7A`, dan copper `#B6643D` berasal dari
@@ -183,6 +186,9 @@ diikuti picker jam; membatalkan salah satunya tidak mengubah nilai lama. Nilai
 awal mulai mengikuti waktu sekarang, dan waktu selesai dapat dihapus kembali
 menjadi Masih berlangsung. Perubahan mulai memvalidasi ulang waktu selesai.
 Tanggal/jam ditampilkan dalam zona waktu perangkat, dengan ketelitian menit.
+Reset formulir meminta konfirmasi. Batal mempertahankan draft; Reset membersihkan
+teks/error, mengembalikan kategori ke Full-Time, waktu mulai ke nilai awal saat
+halaman dibuka, dan waktu selesai menjadi kosong. Fitur ini hanya mengubah draft.
 
 Komponen DateTimeFormField menggabungkan hasil [showDatePicker](https://pub.dev/documentation/material_ui/latest/material_ui/showDatePicker.html)
 dan [showTimePicker](https://pub.dev/documentation/material_ui/latest/material_ui/showTimePicker.html)
