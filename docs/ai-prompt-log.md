@@ -218,3 +218,20 @@ pengalaman masih berlangsung. Perbandingan tanggal juga memperhatikan jam,
 bukan hanya hari. Fungsi validasi dipisahkan dari tampilan agar batas teks,
 URL, serta urutan waktu dapat diuji tanpa membuka halaman. Backend tetap
 memvalidasi dan memeriksa permission saat integrasi API diterapkan nanti.
+
+## 14. Memahami field tanggal dan jam pada form
+
+**Prompt (ringkasan):**
+
+> Field Experience-ku DateTime, jadi gimana cara memilih tanggal sekaligus jam?
+> Kalau pengguna membatalkan salah satu picker, nilai sebelumnya jangan hilang.
+> Jelasin juga cara memvalidasi ulang waktu selesai ketika mulai berubah dan
+> menampilkan semua isian setelah Simpan.
+
+**Hasil penggunaan:**
+
+AI menjelaskan penggunaan FormField<DateTime> untuk menggabungkan dua picker
+menjadi satu nilai form. Nilai baru diterapkan setelah tanggal dan jam
+dikonfirmasi, sedangkan pembatalan mempertahankan draft. Validator waktu
+selesai membaca nilai mulai terbaru. Simpan menjalankan validasi dan mengambil
+snapshot isian untuk dialog, sementara OK menutup dialog tanpa menghapus draft.
