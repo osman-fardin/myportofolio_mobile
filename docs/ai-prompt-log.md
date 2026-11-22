@@ -1,8 +1,8 @@
 # AI Prompt Log
 
 Dokumen ini berisi beberapa contoh prompt yang mewakili penggunaan OpenAI Codex
-selama Tutorial 08, Tugas 7, dan Tutorial 09. Prompt diringkas dari percakapan agar lebih
-mudah dibaca, bukan transkrip literal. Selain penjelasan konsep, Codex juga
+selama Tutorial 08, Tugas 7, Tutorial 09, dan Tugas 8. Prompt diringkas dari
+percakapan agar lebih mudah dibaca, bukan transkrip literal. Selain penjelasan konsep, Codex juga
 membantu menyunting kode dan dokumentasi serta menjalankan pengujian.
 Commit, push, merge, dan pengumpulan saya lakukan sendiri.
 
@@ -201,3 +201,20 @@ memilih tujuan yang sama hanya menutup drawer. Karena route di bawahnya tidak
 ikut dihapus, gabungan navigasi kartu dan drawer dapat menyisakan Home lama
 untuk dikunjungi lewat Back. Kartu tetap memberi feedback SnackBar sebelum
 membuka form, dan form menyediakan akses Back serta drawer.
+
+## 13. Memahami aturan input pengalaman
+
+**Prompt (ringkasan):**
+
+> Untuk form pengalaman, aturan apa saja yang perlu mengikuti model Django-ku?
+> Jelasin field wajib, kategori, thumbnail opsional, dan perbandingan waktu
+> mulai/selesai. Bisa dipisahkan dari widget supaya lebih mudah diuji?
+
+**Hasil penggunaan:**
+
+AI menjelaskan pemetaan field Experience ke aturan input lokal. Enam nilai
+kategori mengikuti backend, sedangkan waktu selesai yang kosong berarti
+pengalaman masih berlangsung. Perbandingan tanggal juga memperhatikan jam,
+bukan hanya hari. Fungsi validasi dipisahkan dari tampilan agar batas teks,
+URL, serta urutan waktu dapat diuji tanpa membuka halaman. Backend tetap
+memvalidasi dan memeriksa permission saat integrasi API diterapkan nanti.

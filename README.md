@@ -55,6 +55,7 @@ flutter run -d chrome
 - `lib/main.dart`: titik masuk, pemilihan tema, dan pendaftaran lisensi font.
 - `lib/screens/menu.dart`: halaman utama dan InfoCard.
 - `lib/screens/project_form.dart`: formulir proyek dan pratinjau input lokal.
+- `lib/forms/experience_validation.dart`: aturan validasi input Experience.
 - `lib/widgets/project_card.dart`: model ItemHomepage dan widget ItemCard.
 - `lib/widgets/left_drawer.dart`: drawer bersama dan pemilihan halaman tujuan.
 - `lib/theme/portfolio_theme.dart`: warna dan konfigurasi tema bersama.
@@ -73,7 +74,8 @@ flutter test
 dart format --output=none --set-exit-if-changed lib test
 ```
 
-Verifikasi terakhir: 31 widget test lulus, analisis statis dan format bersih.
+Verifikasi terakhir: 46 test lulus (31 widget test dan 15 unit test validasi
+Experience), analisis statis dan format bersih.
 Test mencakup isi kartu, layout dan teks 200%, pesan ketiga aksi, tap berulang,
 keyboard, warna unik, serta kontras teks/ikon pada warna terang dan gelap.
 Test juga memeriksa perubahan susunan kartu dan keterjangkauan About/footer.
@@ -82,6 +84,9 @@ jenis bebas, ringkasan, reset, pembatalan dialog, dan layar 320 px/teks 200%.
 Lima test navigasi memeriksa Back dari kartu, pergantian halaman melalui drawer,
 pilihan halaman aktif tanpa kehilangan draft, riwayat campuran, serta drawer
 pada layar 320 px/teks 200%. Test keyboard memperhitungkan tombol drawer baru.
+Test validasi Experience memeriksa teks wajib, batas judul 255 karakter Unicode,
+enam kategori backend, thumbnail opsional/HTTP(S)/maksimal 200 karakter, serta
+urutan tanggal dan jam termasuk perbandingan offset zona waktu.
 Pada checkpoint Tugas 7, interaksi dan tampilan Chrome diperiksa pada lebar
 320, 390, 768, dan 1280 px. Build web saat itu berhasil menggunakan
 `flutter build web --no-web-resources-cdn`;
@@ -112,6 +117,7 @@ belum diverifikasi.
 | Tutorial 08, 11 November 2026 | Halaman utama, identitas, tiga kartu aksi, SnackBar, dan widget test; PR #1 merged pada checkpoint `e642989`. |
 | Tugas 7, 14–15 November 2026 | Warna kartu pada `050626a`, adaptasi UI web pada `9bf2248`, 15 widget test, serta enam refleksi pada README ini. |
 | Tutorial 09, 17 November 2026 | Material UI pada `c882558`, pemisahan screen/widget pada `07e3c0c`, form pada `d8ad32c`, serta drawer/navigasi dengan total 31 test. |
+| Tugas 8, 22 November 2026 | Menyiapkan aturan validasi Experience dan 15 unit test. Halaman form serta navigasi Experience belum ditambahkan. |
 
 Warna disimpan pada model ItemHomepage dan diterapkan langsung oleh ItemCard.
 Palet navy `#23354D`, cloud `#526F7A`, dan copper `#B6643D` berasal dari
@@ -152,6 +158,20 @@ menjalankan `FormState.validate()` dan `save()` sebelum membuka dialog.
 Menekan OK mereset seluruh input dan pilihan. Menutup dialog dengan Back atau
 klik di luar dialog mempertahankan draft. Pola Form/GlobalKey mengacu pada
 [panduan validasi Flutter](https://docs.flutter.dev/cookbook/forms/validation).
+
+## Experience Form Progress
+
+Aturan input Experience dipisahkan dari widget agar dapat diuji sebelum
+halaman formulir dibuat. Field mengacu pada model backend yang sudah ada:
+`title`, `description`, `category`, `thumbnail`, `started_at`, dan `ended_at`.
+Kategori mengikuti enam pilihan backend dengan nilai awal `full-time`.
+Judul dan deskripsi wajib berisi teks; judul dibatasi 255 karakter. Thumbnail
+opsional diperiksa sebagai URL HTTP(S), maksimal 200 karakter. Waktu mulai
+wajib, sedangkan waktu selesai boleh kosong untuk pengalaman yang masih
+berlangsung. Waktu selesai yang lebih awal ditolak; waktu yang sama diterima.
+
+Checkpoint ini belum menambahkan form atau mengirim data ke API. Validasi lokal
+tidak menggantikan pembersihan teks, validasi, dan permission pada backend.
 
 ## Navigation
 
