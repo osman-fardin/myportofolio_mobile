@@ -1,19 +1,16 @@
 # AI Prompt Log
 
-Dokumen ini berisi beberapa contoh prompt yang mewakili penggunaan OpenAI Codex
-selama Tutorial 08, Tugas 7, Tutorial 09, dan Tugas 8. Prompt diringkas dari
-percakapan agar lebih mudah dibaca, bukan transkrip literal. Selain penjelasan konsep, Codex juga
-membantu menyunting kode dan dokumentasi serta menjalankan pengujian.
-Commit, push, merge, dan pengumpulan saya lakukan sendiri.
+Dokumen ini memuat ringkasan pertanyaan dan penjelasan konsep dari diskusi
+dengan OpenAI Codex selama Tutorial 08–10 dan Tugas 7–8. Prompt disajikan
+sebagai ringkasan topik pembelajaran, bukan transkrip literal percakapan.
 
 ## 1. Memahami Flutter dan menyiapkan proyek
 
 **Prompt (ringkasan):**
 
-> Flutter sama Dart itu hubungannya gimana? Bisa bantu jelasin fungsi SDK,
-> flutter doctor, dan struktur proyeknya? Untuk aplikasi mobile ini perlu repo
-> baru atau bisa digabung sama Django? Bantu juga menyiapkan proyek awal dan
-> mengecek aplikasi counter-nya bisa jalan.
+> Apa hubungan antara Flutter dan Dart dalam pengembangan aplikasi?
+> Jelaskan fungsi Flutter SDK, flutter doctor, dan struktur dasar proyek.
+> Mengapa kode Flutter dan backend Django ditempatkan pada repositori terpisah?
 
 **Hasil penggunaan:**
 
@@ -23,29 +20,28 @@ lib/main.dart menjadi titik masuk aplikasi, sementara pubspec.yaml menyimpan
 konfigurasi dan dependency. Repo Flutter dipisahkan dari backend Django sesuai
 alur proyek mobile ini.
 
-## 2. Merapikan README dan prompt log
+## 2. Memahami struktur dokumentasi proyek
 
 **Prompt (ringkasan):**
 
-> README-nya bisa dibuat lebih formal dan sederhana kayak repo portofolio
-> Django-ku? Prompt log juga pakai gaya nomor-nomor awal di sana ya: pertanyaan
-> yang natural dan hasilnya singkat, nggak perlu semua detail proses dimasukin.
+> Bagaimana struktur README yang membantu pembaca memahami dan menjalankan
+> proyek Flutter? Jelaskan informasi yang perlu dicantumkan serta perbedaan
+> fungsi README dan catatan pembelajaran.
 
 **Hasil penggunaan:**
 
-AI menjelaskan susunan README yang memudahkan pembaca mengenali proyek dan
-menjalankannya: deskripsi, identitas, teknologi, setup, struktur, serta cara
-pengujian. Catatan percakapan ditempatkan pada prompt log agar README tetap
-ringkas dan fokus pada informasi proyek.
+AI menjelaskan bahwa README menyajikan deskripsi, identitas, teknologi,
+petunjuk menjalankan aplikasi, struktur berkas, dan pengujian. Catatan
+pembelajaran memuat pertanyaan serta penjelasan konsep. Pembagian ini membantu
+pembaca menemukan informasi proyek dan materi pembelajaran sesuai kebutuhan.
 
 ## 3. Memisahkan halaman utama
 
 **Prompt (ringkasan):**
 
-> Kalau semua kode masih di main.dart, enaknya dipisah gimana? Bisa jelasin
-> bagian mana yang tetap di main.dart dan mana yang masuk menu.dart? Bantu ubah
-> halaman utama jadi StatelessWidget dan jelasin kenapa counter-nya tidak
-> diperlukan lagi.
+> Bagaimana pembagian tanggung jawab antara main.dart dan halaman utama
+> aplikasi? Jelaskan alasan penggunaan StatelessWidget pada halaman menu
+> yang tidak memiliki state lokal yang berubah.
 
 **Hasil penggunaan:**
 
@@ -58,9 +54,9 @@ yang berubah. Pemisahan ini membuat tanggung jawab tiap berkas lebih jelas.
 
 **Prompt (ringkasan):**
 
-> Untuk kartu NPM, nama, dan kelas, bisa pakai satu widget yang dipakai ulang?
-> Jelasin cara kerja parameter title sama content di InfoCard, terus bantu
-> susun ketiga kartunya supaya tetap terbaca di layar kecil.
+> Bagaimana parameter widget memungkinkan InfoCard digunakan untuk beberapa
+> jenis informasi? Jelaskan fungsi title dan content serta peran Expanded
+> dan SingleChildScrollView dalam penyusunan tata letak.
 
 **Hasil penggunaan:**
 
@@ -73,9 +69,9 @@ membuat konten tetap bisa dijangkau ketika tinggi layar terbatas.
 
 **Prompt (ringkasan):**
 
-> Bedanya ItemHomepage sama ItemCard itu apa? Bantu jelasin dan susun menu
-> Lihat Proyek, Tambah Proyek, sama Logout pakai ikon. Pas ditekan, masing-masing
-> harus menampilkan SnackBar yang sesuai, dan pesan lama jangan sampai numpuk.
+> Apa perbedaan tanggung jawab ItemHomepage dan ItemCard?
+> Jelaskan hubungan Material, InkWell, dan ScaffoldMessenger dalam memberikan
+> umpan balik interaksi. Bagaimana clearSnackBars mengatur antrean pesan?
 
 **Hasil penggunaan:**
 
@@ -88,10 +84,9 @@ sedangkan clearSnackBars mencegah pesan sebelumnya mengantre.
 
 **Prompt (ringkasan):**
 
-> Tiap kartu harus beda warna, tapi aku mau tetap ikut gaya web portofolioku.
-> Bisa pakai palet dari web itu? Jelasin cara menyimpan warna di ItemHomepage
-> supaya ItemCard nggak perlu banyak if-else, dan bantu cek teks sama ikonnya
-> tetap terbaca.
+> Bagaimana atribut warna pada ItemHomepage mengatur tampilan setiap kartu
+> melalui satu widget yang dapat digunakan kembali? Jelaskan hubungan palet
+> warna portofolio dengan pemilihan warna teks dan ikon yang mudah dibaca.
 
 **Hasil penggunaan:**
 
@@ -105,9 +100,9 @@ hitam atau putih agar tetap terbaca pada warna latar yang berbeda.
 
 **Prompt (ringkasan):**
 
-> Aku mau tampilan mobile-nya terasa sama kayak web portofolioku. Bisa jelasin
-> cara mengatur tema, font, foto, sama background-nya di Flutter? Susunan
-> kartunya juga disesuaikan sama lebar layar, tapi data dan SnackBar tetap ada.
+> Bagaimana ThemeData dan deklarasi aset pada pubspec.yaml menjaga konsistensi
+> visual aplikasi? Jelaskan penggunaan LayoutBuilder untuk menyesuaikan
+> susunan kartu dengan ruang yang tersedia.
 
 **Hasil penggunaan:**
 
@@ -122,14 +117,13 @@ disertakan bersama aset Space Grotesk.
 
 **Prompt (ringkasan):**
 
-> Bisa jelasin enam pertanyaan refleksi Tugas 7 pakai kode yang ada di proyekku?
-> Aku mau tahu hubungan widget tree, MaterialApp, StatelessWidget, context,
-> dan hot reload. Untuk daftar widget, bedain juga mana widget dan mana yang
-> cuma objek konfigurasi seperti ThemeData.
+> Bagaimana hubungan widget tree, MaterialApp, StatelessWidget, dan
+> BuildContext pada aplikasi ini? Jelaskan perbedaan widget dan objek
+> konfigurasi seperti ThemeData, serta perbedaan hot reload dan hot restart.
 
 **Hasil penggunaan:**
 
-AI menjelaskan keenam konsep dengan contoh alur MyApp sampai ItemCard,
+AI menjelaskan konsep tersebut dengan contoh alur MyApp sampai ItemCard,
 penggunaan context untuk tema dan SnackBar, serta perbedaan perubahan tampilan
 dengan inisialisasi ulang aplikasi. Daftar widget dicocokkan dengan berkas
 halaman, tema, dan bagian portofolio. Dokumentasi resmi Flutter menjadi rujukan
@@ -139,9 +133,9 @@ untuk membedakan hot reload, hot restart, dan full restart.
 
 **Prompt (ringkasan):**
 
-> Di materi, import Material sekarang pakai material_ui. Bedanya dengan import
-> sebelumnya apa? Bisa jelasin cara menyesuaikannya dengan versi Flutter yang
-> kupakai dan bantu cek supaya tema serta fitur lama tetap berjalan?
+> Apa peran paket material_ui pada versi Flutter yang digunakan proyek ini?
+> Jelaskan hubungan pubspec.yaml dan pubspec.lock serta alasan penyesuaian
+> impor perlu dilakukan pada kode aplikasi dan pengujian.
 
 **Hasil penggunaan:**
 
@@ -155,9 +149,9 @@ tipe yang berbeda. Penyesuaian ini tidak memerlukan pembaruan Flutter SDK.
 
 **Prompt (ringkasan):**
 
-> Kalau halaman dipindah ke folder screens dan ItemCard ke widgets, import
-> mana saja yang perlu disesuaikan? ItemHomepage sebaiknya ditaruh di mana
-> supaya kartu tidak bergantung pada halaman utama?
+> Bagaimana pemisahan folder screens dan widgets memperjelas tanggung jawab
+> kode? Jelaskan penempatan ItemHomepage bersama ItemCard serta pengaruh
+> pemindahan berkas terhadap referensi impor.
 
 **Hasil penggunaan:**
 
@@ -171,27 +165,27 @@ lokasi baru. Pemisahan berkas mempertahankan tampilan dan perilaku SnackBar.
 
 **Prompt (ringkasan):**
 
-> Gimana cara membuat form sesuai field Project-ku? Jelasin hubungan
-> StatefulWidget, Form, GlobalKey, validator, dan onSaved. Aku juga perlu
-> dropdown yang tetap bisa diisi jenis lain, dialog ringkasan, dan reset
-> setelah OK tanpa membawa data proyek sebelumnya.
+> Bagaimana hubungan StatefulWidget, Form, GlobalKey, validator, dan onSaved
+> pada formulir Project? Jelaskan pengelolaan pilihan jenis proyek,
+> penyajian ringkasan isian, serta pemulihan nilai awal setelah konfirmasi.
 
 **Hasil penggunaan:**
 
 AI menjelaskan bahwa validator memeriksa input, sedangkan onSaved mengambil
 nilai setelah form valid. GlobalKey memberi akses ke validate, save, dan reset;
 state menyimpan pilihan jenis proyek yang menentukan munculnya input tambahan.
-Key pada kelompok field menjaga isian ketika susunan widget berubah. Dialog
-menerima ringkasan input sementara, lalu konfirmasi OK mereset field dan pilihan
-bersama. Belum ada penyimpanan data ke backend.
+Key pada kelompok field menjaga isian ketika susunan widget berubah. Pada
+tahap Tutorial 09, dialog menampilkan ringkasan lokal dan konfirmasi OK
+mereset field serta pilihan. Integrasi penyimpanan API dibahas pada entri
+Tutorial 10.
 
 ## 12. Memahami drawer dan riwayat navigasi
 
 **Prompt (ringkasan):**
 
-> Kenapa tombol Tambah Proyek memakai push, tapi drawer memakai
-> pushReplacement? Jelasin efeknya ke Back. Gimana supaya memilih halaman
-> yang sedang dibuka tidak menghapus draft dan SnackBar tetap berfungsi?
+> Apa perbedaan Navigator.push, pushReplacement, dan pop terhadap stack
+> navigasi? Jelaskan pengaruhnya pada tombol kembali serta alasan pemilihan
+> halaman aktif pada drawer perlu mempertahankan isian formulir.
 
 **Hasil penggunaan:**
 
@@ -206,9 +200,9 @@ membuka form, dan form menyediakan akses Back serta drawer.
 
 **Prompt (ringkasan):**
 
-> Untuk form pengalaman, aturan apa saja yang perlu mengikuti model Django-ku?
-> Jelasin field wajib, kategori, thumbnail opsional, dan perbandingan waktu
-> mulai/selesai. Bisa dipisahkan dari widget supaya lebih mudah diuji?
+> Bagaimana aturan model Experience pada Django menjadi acuan validasi
+> formulir Flutter? Jelaskan validasi field wajib, kategori, thumbnail
+> opsional, dan urutan waktu. Mengapa logika validasi dipisahkan dari widget?
 
 **Hasil penggunaan:**
 
@@ -223,10 +217,9 @@ memvalidasi dan memeriksa permission saat integrasi API diterapkan nanti.
 
 **Prompt (ringkasan):**
 
-> Field Experience-ku DateTime, jadi gimana cara memilih tanggal sekaligus jam?
-> Kalau pengguna membatalkan salah satu picker, nilai sebelumnya jangan hilang.
-> Jelasin juga cara memvalidasi ulang waktu selesai ketika mulai berubah dan
-> menampilkan semua isian setelah Simpan.
+> Bagaimana FormField<DateTime> menggabungkan pemilihan tanggal dan jam
+> menjadi satu nilai? Jelaskan penanganan pembatalan picker serta validasi
+> ulang waktu selesai ketika waktu mulai berubah.
 
 **Hasil penggunaan:**
 
@@ -240,9 +233,9 @@ snapshot isian untuk dialog, sementara OK menutup dialog tanpa menghapus draft.
 
 **Prompt (ringkasan):**
 
-> Cara menambahkan form pengalaman ke kartu dan drawer yang sama gimana?
-> Home sama Tambah Proyek harus tetap ada. Kartu keempat juga menyesuaikan
-> lebar layar, dan kalau memilih halaman aktif draft jangan hilang.
+> Bagaimana kartu aksi dan drawer menyediakan navigasi ke formulir Experience?
+> Jelaskan perbedaan perpindahan route pada keduanya serta penyesuaian
+> susunan kartu terhadap lebar layar dan ukuran teks.
 
 **Hasil penggunaan:**
 
@@ -256,9 +249,9 @@ sesuai ruang yang tersedia, dengan satu kolom saat teks diperbesar.
 
 **Prompt (ringkasan):**
 
-> Kalau ditambah reset form, gimana supaya pengguna tidak kehilangan draft
-> karena salah tekan? Setelah setuju, teks, kategori, tanggal, dan pesan error
-> harus kembali ke nilai awal, bukan cuma mengosongkan kolom teks.
+> Mengapa reset formulir memerlukan konfirmasi pengguna? Jelaskan peran
+> FormState.reset dalam memulihkan teks, kategori, tanggal, dan pesan
+> validasi, serta penanganan pembatalan reset.
 
 **Hasil penggunaan:**
 
@@ -268,20 +261,84 @@ sedangkan state kategori yang dipakai ringkasan ikut dikembalikan ke default.
 Pembatalan tidak mengubah draft. Reset hanya memengaruhi isian lokal dan tidak
 menghapus data portofolio.
 
-## 17. Memahami refleksi dan memeriksa hasil Tugas 8
+## 17. Memahami navigasi, tata letak, dan validasi formulir
 
 **Prompt (ringkasan):**
 
-> Jelasin empat refleksi Tugas 8 berdasarkan kode yang sudah ada: navigasi,
-> struktur halaman dan tema, layout saat layar sempit, serta alur validasi
-> Simpan. Bantu cocokkan jawabannya dengan test dan pisahkan hasil kerja ini
-> menjadi commit per fitur.
+> Bagaimana navigasi, tema bersama, dan susunan formulir mendukung penggunaan
+> aplikasi pada layar sempit? Jelaskan perbedaan bantuan keyboard atau picker
+> dengan validasi input, serta peran widget test dalam memeriksa perilakunya.
 
 **Hasil penggunaan:**
 
 AI menjelaskan hubungan stack navigasi, drawer bersama, dan tema antarhalaman.
-Penjelasan form membedakan bantuan keyboard/picker dari aturan validasi, serta
-menghubungkan GlobalKey, validator, validate, dan onSaved dengan dialog hasil.
-Test membuktikan perilaku valid/invalid, pembatalan picker, layout, dan reset.
-Perubahan dipisahkan menjadi patch per checkpoint agar dapat direview dan
-di-commit secara bertahap.
+Layout yang dapat digulir menjaga field tetap terjangkau saat layar sempit
+atau keyboard terbuka. Keyboard dan picker membantu pengisian, sedangkan
+validator memeriksa aturan input. Widget test memeriksa interaksi seperti
+pembatalan picker, validasi ulang, navigasi, dan reset.
+
+## 18. Memahami JSON dan pemanggilan API
+
+**Prompt (ringkasan):**
+
+> Bagaimana data JSON dari API Django dipetakan menjadi objek Project di Flutter?
+> Jelaskan fungsi json_serializable dan pemisahan permintaan HTTP melalui
+> ApiClient. Bagaimana FutureBuilder menampilkan data serta menangani kondisi
+> pemuatan, kegagalan, dan daftar kosong?
+
+**Hasil penggunaan:**
+
+AI menjelaskan pemetaan nama field JSON ke atribut model Dart serta fungsi
+fromJson dan toJson. ApiClient menangani komunikasi HTTP, sedangkan
+FutureBuilder menyusun tampilan berdasarkan hasil permintaan. Future disimpan
+pada State agar rebuild tidak mengulang permintaan; refresh memperbarui Future
+tersebut. Field yang dikelola server tidak disertakan dalam payload POST.
+
+## 19. Memahami sesi token dan guard form
+
+**Prompt (ringkasan):**
+
+> Apa perbedaan autentikasi token dan sesi pada Django? Jelaskan peran
+> AuthState dan provider dalam menyimpan status login serta membatasi akses
+> formulir Project. Mengapa respons 401 dan 403 perlu ditangani secara berbeda?
+
+**Hasil penggunaan:**
+
+AI menjelaskan bahwa autentikasi mengenali pengguna, sedangkan permission
+menentukan operasi yang diizinkan. AuthState menyimpan token di memori dan
+provider meneruskan perubahan status login ke antarmuka. Respons 401 memerlukan
+autentikasi ulang, sementara 403 menunjukkan penolakan izin. Pembatasan formulir
+pada antarmuka tetap harus disertai pemeriksaan permission oleh server.
+
+## 20. Memahami CI dan artifact APK
+
+**Prompt (ringkasan):**
+
+> Bagaimana alur continuous integration pada Flutter menggunakan
+> very_good_workflows dan GitHub Actions? Jelaskan fungsi code generation,
+> hubungan needs antara job pengujian dan build APK, serta penyimpanan APK
+> sebagai artifact. Apa yang dibuktikan oleh build lokal dan workflow remote?
+
+**Hasil penggunaan:**
+
+AI menjelaskan bahwa kode model perlu dihasilkan sebelum analisis, pengujian,
+dan build karena berkas generated tidak disimpan dalam Git. needs membuat job
+APK menunggu keberhasilan job sebelumnya, sedangkan artifact menyimpan hasil
+build agar dapat diunduh. Build lokal memeriksa lingkungan pengembangan;
+keberhasilan workflow remote perlu diperiksa melalui GitHub Actions.
+
+## 21. Memahami gambar publik lintas origin pada Flutter Web
+
+**Prompt (ringkasan):**
+
+> Mengapa gambar static Django dapat gagal ditampilkan di Flutter Web meskipun
+> permintaan data API berhasil? Jelaskan hubungan CORS dengan pemakaian gambar
+> pada canvas serta fungsi WebHtmlElementStrategy untuk gambar publik.
+
+**Hasil penggunaan:**
+
+AI menjelaskan bahwa izin CORS pada endpoint API tidak otomatis berlaku pada
+berkas static. Pemakaian gambar lintas origin pada canvas memerlukan izin yang
+sesuai dari server gambar. WebHtmlElementStrategy.prefer menampilkan gambar
+publik melalui elemen HTML, sehingga kebijakan CORS backend tetap dapat
+dibatasi pada API. Token autentikasi tidak disertakan pada URL gambar.

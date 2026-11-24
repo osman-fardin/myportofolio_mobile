@@ -23,6 +23,9 @@ mata kuliah Pemrograman Berbasis Platform. Proyek ini dikembangkan terpisah dari
 - Form Experience dengan enam field, pemilih tanggal/jam, dan ringkasan lokal,
   dapat dibuka melalui kartu serta drawer.
 - Reset draft Experience dengan konfirmasi; pembatalan mempertahankan isian.
+- Daftar/detail proyek publik dari API Django, refresh, empty/error state, dan retry.
+- Login token di memori, logout dengan pencabutan token, guard form Project,
+  serta POST proyek dengan konfirmasi hanya setelah respons 201.
 
 ## Technology
 
@@ -50,14 +53,22 @@ Dari direktori proyek, pasang dependency dan jalankan aplikasi:
 
 ```bash
 flutter pub get
-flutter run -d chrome
+dart run build_runner build
+flutter run -d chrome --web-port=8774 --dart-define=API_BASE_URL=http://localhost:8000
 ```
 
 ## Project Structure
 
 - `lib/main.dart`: titik masuk, pemilihan tema, dan pendaftaran lisensi font.
+- `lib/config.dart`: API_BASE_URL; emulator debug memakai 10.0.2.2:8000,
+  release memakai HTTPS kecuali di-override dengan --dart-define.
+- `lib/models/project.dart`: model JSON sesuai serializer backend lama.
+- `lib/services/`: ApiClient HTTP dan AuthState token di memori.
+- `lib/screens/project_list_screen.dart`, `project_detail_screen.dart`: data publik.
+- `lib/screens/login_screen.dart`: form login dan feedback autentikasi.
+- `lib/widgets/auth_guard.dart`: guard login dan logout.
 - `lib/screens/menu.dart`: halaman utama dan InfoCard.
-- `lib/screens/project_form.dart`: formulir proyek dan pratinjau input lokal.
+- `lib/screens/project_form.dart`: formulir proyek dan POST bertoken ke backend.
 - `lib/screens/experience_form.dart`: formulir pengalaman dan dialog ringkasan.
 - `lib/forms/experience_validation.dart`: aturan validasi input Experience.
 - `lib/widgets/date_time_form_field.dart`: field tanggal/jam yang mengikuti siklus Form.
@@ -79,8 +90,8 @@ flutter test
 dart format --output=none --set-exit-if-changed lib test
 ```
 
-Verifikasi terakhir: 64 test lulus (49 widget test dan 15 unit test validasi
-Experience), analisis statis dan format bersih.
+Verifikasi Tutorial 10: 84 test lulus dengan coverage, analisis statis dan format
+bersih. Test memakai MockClient agar hasil tidak bergantung server live.
 Test mencakup isi kartu, layout dan teks 200%, pesan keempat aksi, tap berulang,
 keyboard, warna unik, serta kontras teks/ikon pada warna terang dan gelap.
 Test juga memeriksa perubahan susunan kartu dan keterjangkauan About/footer.
@@ -105,14 +116,15 @@ Build web Tutorial 09 juga berhasil. Chrome diperiksa untuk drawer/form pada
 390 px, dialog pada 320/390 px, serta Home/form dan browser Back pada 1280 px.
 Pengisian dengan keyboard, dropdown jenis bebas, ringkasan, dan reset setelah
 OK dicoba; console yang diperiksa mencatat nol error/warning. Font, renderer,
-dan gambar pada sesi ini termuat lokal. Build native belum diverifikasi.
+dan gambar pada sesi ini termuat lokal. Pada checkpoint Tutorial 09 tersebut,
+build native belum diverifikasi.
 
 Build web Tugas 8 berhasil dengan perintah yang sama. Chrome diperiksa pada
 lebar 320, 390, dan 1280 px untuk navigasi kartu/drawer/Home, browser Back,
 input invalid lalu diperbaiki, dialog ringkasan, picker tanggal/jam, serta
 reset batal/setuju. Screenshot ditinjau setelah layout selesai diperbarui.
 Console mencatat nol error/warning; 15 request bundle/aset lokal berhasil.
-Tidak ada klaim build atau pengujian Android, iOS, maupun desktop native.
+Pada checkpoint Tugas 8 tersebut belum ada build atau pengujian platform native.
 
 ## Development Progress
 
@@ -123,9 +135,10 @@ Osman Fardin, NPM 2506541723, kelas PBP D. Intro dan About memakai isi profil
 serta gaya web yang sama. Grid aksi menjadi satu kolom pada layar sempit atau
 teks besar, dua kolom pada lebar menengah, dan empat pada layar lebar. Setiap aksi menampilkan pesan
 melalui SnackBar. Kartu Tambah Proyek dan Tambah Pengalaman membuka form masing-masing;
-drawer menghubungkan ketiga halaman. Lihat Proyek dan Logout masih berupa feedback SnackBar. Form belum
-menyimpan data. Integrasi API belum diterapkan; build Android, iOS, dan desktop
-belum diverifikasi.
+drawer menghubungkan halaman utama, daftar, dan kedua form. Lihat Proyek mengambil
+data publik dari Django; Logout mencabut token dan membersihkan sesi lokal.
+Project sudah memakai API, sedangkan Experience masih pratinjau lokal dari
+Tugas 8. Build iOS/desktop belum diverifikasi.
 
 ### Weekly Progress
 
@@ -134,6 +147,7 @@ belum diverifikasi.
 | Tutorial 08, 11 November 2026 | Halaman utama, identitas, tiga kartu aksi, SnackBar, dan widget test; PR #1 merged pada checkpoint `e642989`. |
 | Tugas 7, 14–15 November 2026 | Warna kartu pada `050626a`, adaptasi UI web pada `9bf2248`, 15 widget test, serta enam refleksi pada README ini. |
 | Tutorial 09, 17 November 2026 | Material UI pada `c882558`, pemisahan screen/widget pada `07e3c0c`, form pada `d8ad32c`, serta drawer/navigasi dengan total 31 test. |
+| Tutorial 10, 24 November 2026 | Model/API client, daftar/detail publik, token session, guard dan POST Project, serta workflow CI/APK. Verifikasi lokal tidak membuktikan Actions/deploy sudah berjalan. |
 | Tugas 8, 22 November 2026 | Validasi pada `c8a3dcf`, form Experience/picker/dialog, kartu keempat, drawer bersama dan reset dengan konfirmasi; total 64 test. |
 
 Warna disimpan pada model ItemHomepage dan diterapkan langsung oleh ItemCard.
@@ -152,8 +166,9 @@ konsisten. Flutter SDK tetap 3.47.6.
 
 ## Project Form
 
-Form mengikuti field `Project` pada backend portofolio. Data hanya ditampilkan
-dalam dialog pratinjau, belum dikirim ke API atau disimpan ke database.
+Form mengikuti field `Project` pada backend portofolio. Sejak Tutorial 10,
+Simpan proyek mengirim POST bertoken ke /api/v1/projects/. Server tetap
+memutuskan permission: hanya superuser/pemilik dapat membuat Project.
 
 | Field | Aturan input |
 | --- | --- |
@@ -169,9 +184,10 @@ dalam dialog pratinjau, belum dikirim ke API atau disimpan ke database.
 
 Pilihan dropdown adalah bantuan input untuk `project_type` yang berupa teks
 bebas, bukan enum baru pada backend. Validasi lokal ini tidak menggantikan
-validasi backend saat API dihubungkan nanti. Isian dirapikan dengan trim;
-field wajib menolak input yang hanya berisi spasi. Tombol Pratinjau proyek
-menjalankan `FormState.validate()` dan `save()` sebelum membuka dialog.
+validasi backend yang tetap menjadi sumber keputusan. Isian dirapikan dengan trim;
+field wajib menolak input yang hanya berisi spasi. Tombol Simpan proyek
+menjalankan `FormState.validate()` dan `save()` sebelum POST. Dialog sukses
+hanya dibuka setelah server memberi 201; ringkasan memakai nilai dari respons.
 Menekan OK mereset seluruh input dan pilihan. Menutup dialog dengan Back atau
 klik di luar dialog mempertahankan draft. Pola Form/GlobalKey mengacu pada
 [panduan validasi Flutter](https://docs.flutter.dev/cookbook/forms/validation).
@@ -220,6 +236,84 @@ tombol Back saat dibuka dari kartu, serta drawer untuk kembali ke Home.
 `pushReplacement` mengganti satu route teratas, bukan membersihkan seluruh
 riwayat. Rujukan: [navigasi dan Back](https://docs.flutter.dev/cookbook/navigation/navigation-basics)
 serta [pushReplacement](https://api.flutter.dev/flutter/widgets/Navigator/pushReplacement.html).
+
+## Tutorial 10: Backend Integration
+
+Backend memakai repo Django yang sama. Sebelum menjalankannya, pasang requirement
+baru dan jalankan migrasi bawaan authtoken dari environment Django:
+
+```bash
+cd ../myportofolio
+source env/bin/activate
+python -m pip install -r requirements.txt
+python manage.py migrate
+python manage.py runserver
+```
+
+| Endpoint | Pemakaian Flutter |
+| --- | --- |
+| GET /api/v1/projects/ | Publik; FutureBuilder dengan Future dibuat di initState, pull-to-refresh dan retry. |
+| POST /api/v1/auth/token/ | Username/password ditukar menjadi token; token hanya disimpan di memori. |
+| POST /api/v1/projects/ | Authorization: Token; hanya pemilik/superuser boleh membuat proyek. |
+| POST /api/v1/auth/logout/ | Mencabut token saat ini; sesi lokal tetap dibersihkan jika server gagal. |
+
+Form Project dijaga pada kartu, drawer, dan halaman itu sendiri. Login gagal
+tetap di layar login; batal tidak membuka form. HTTP 401 menghapus sesi dan
+meminta login ulang. HTTP 403 menampilkan penolakan izin tanpa menganggap akun
+sebagai pemilik. Draft tetap tersedia setelah login ulang; POST tidak otomatis
+diulang agar tidak membuat duplikat. Saat POST berjalan, input/tombol dinonaktifkan.
+Pesan error tidak menampilkan body HTML/stack trace dari server.
+
+Model JSON mengikuti field serializer milik proyek ini, bukan contoh
+tech_stack/project_url pada PDF. id/star_count/is_starred dibaca tetapi tidak
+dikirim pada POST. thumbnail_path relatif diarahkan ke /static/ backend;
+gambar kosong tidak ditampilkan dan gambar gagal diberi fallback. Flutter Web
+memakai WebHtmlElementStrategy.prefer untuk menampilkan gambar publik lintas
+origin. Ini mengatasi gambar static Django development yang tidak memiliki
+header CORS untuk canvas, tanpa memperluas CORS backend di luar API.
+Experience tetap memakai form lokal Tugas 8; integrasi bagian itu untuk tugas
+selanjutnya. Empat role backend dan kebijakan Projects tetap dipertahankan.
+
+Token di memori hilang ketika aplikasi direstart/halaman direload. Tidak ada
+token, password, atau database yang disertakan ke repo. Generated *.g.dart
+di-ignore dan dibuat kembali setelah pub get. Generator versi saat ini tidak
+memerlukan --delete-conflicting-outputs yang dicontohkan PDF.
+
+## CI and Android Artifact
+
+.github/workflows/main.yaml memanggil very_good_workflows v2 untuk setup
+generator, format, analyze dan test/coverage. Flutter dipatok 3.47.6 agar sesuai
+environment lokal. Job build_apk memakai needs: build, Java 17, generator yang
+sama, lalu mengunggah APK sebagai artifact app-release-apk. API_BASE_URL dapat
+diatur melalui repository variable; default rilis memakai HTTPS backend PWS.
+HTTP lokal hanya diaktifkan pada manifest debug Android.
+
+```bash
+dart run build_runner build
+flutter test --coverage
+flutter build web --no-web-resources-cdn --dart-define=API_BASE_URL=http://localhost:8000
+flutter build apk --release
+```
+
+Workflow baru berjalan setelah push/PR oleh pemilik repo. Status Actions hijau,
+unggahan artifact di GitHub, dan deployment backend belum diklaim selesai dari
+verifikasi lokal. Backend token harus dipasang/migrasi oleh pemilik sebelum
+login ke server deployment tersedia. APK memakai signing debug bawaan proyek
+untuk latihan, bukan konfigurasi publikasi Play Store.
+
+Verifikasi akhir Tutorial 10: 278 test backend dan 84 test Flutter lulus;
+analyze, format, build web, serta build APK release lokal berhasil. APK berukuran
+sekitar 54,1 MB. Chrome diperiksa pada lebar 320, 390, dan 1280 piksel untuk
+guard, login, POST 201, logout, daftar/detail, dan gambar publik. Setelah
+perbaikan gambar lintas origin, sesi browser terakhir mencatat nol error/warning.
+QA memakai salinan database dan akun sementara yang kemudian dibersihkan.
+Build Android sudah diverifikasi, tetapi APK belum dijalankan pada perangkat;
+iOS/macOS dan Actions remote belum diverifikasi.
+
+Rujukan: [DRF TokenAuthentication](https://www.django-rest-framework.org/api-guide/authentication/#tokenauthentication),
+[django-cors-headers](https://github.com/adamchainz/django-cors-headers),
+[Very Good Workflows](https://github.com/VeryGoodOpenSource/very_good_workflows),
+[Image.network](https://api.flutter.dev/flutter/widgets/Image/Image.network.html).
 
 ## Pertanyaan Reflektif
 
