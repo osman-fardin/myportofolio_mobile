@@ -1,14 +1,13 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
-import 'package:myportofolio_mobile/theme/portfolio_theme.dart';
+
+import 'support/test_app.dart';
 
 Finder field(String name) => find.byKey(ValueKey(name));
 
 Future<void> openForm(WidgetTester tester) async {
-  await tester.pumpWidget(
-    MaterialApp(theme: PortfolioTheme.light, home: const ProjectFormPage()),
-  );
+  await tester.pumpWidget(testHarness(const ProjectFormPage()));
 }
 
 Future<void> enter(WidgetTester tester, String name, String value) async {
@@ -18,7 +17,7 @@ Future<void> enter(WidgetTester tester, String name, String value) async {
 }
 
 Future<void> preview(WidgetTester tester) async {
-  final button = find.widgetWithText(ElevatedButton, 'Pratinjau proyek');
+  final button = find.widgetWithText(ElevatedButton, 'Simpan proyek');
   await tester.ensureVisible(button);
   await tester.tap(button);
   await tester.pumpAndSettle();
@@ -107,7 +106,7 @@ void main() {
       );
     }
     expect(
-      find.text('Ini pratinjau lokal. Data belum disimpan ke portofolio.'),
+      find.text('Server mengonfirmasi proyek telah disimpan.'),
       findsOneWidget,
     );
     await tester.tap(find.widgetWithText(TextButton, 'OK'));

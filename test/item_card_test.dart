@@ -2,7 +2,9 @@ import 'dart:math' as math;
 
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:myportofolio_mobile/main.dart';
+
+import 'support/test_app.dart';
+
 import 'package:myportofolio_mobile/widgets/project_card.dart';
 
 double contrastRatio(Color first, Color second) {
@@ -16,7 +18,7 @@ void main() {
   testWidgets('Action cards have distinct backgrounds and readable labels', (
     tester,
   ) async {
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(testApp());
     final cards = find.byType(ItemCard);
     expect(cards, findsNWidgets(4));
     final backgrounds = <Color>{};
