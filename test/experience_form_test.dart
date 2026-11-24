@@ -1,7 +1,9 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:myportofolio_mobile/screens/experience_form.dart';
-import 'package:myportofolio_mobile/theme/portfolio_theme.dart';
+
+import 'support/test_app.dart';
+
 import 'package:myportofolio_mobile/widgets/date_time_form_field.dart';
 
 Finder textField(String name) => find.byKey(ValueKey('experience-$name'));
@@ -12,9 +14,7 @@ FormFieldState<DateTime> dateState(WidgetTester tester, String label) =>
     tester.state<FormFieldState<DateTime>>(dateField(label));
 
 Future<void> openForm(WidgetTester tester) async {
-  await tester.pumpWidget(
-    MaterialApp(theme: PortfolioTheme.light, home: const ExperienceFormPage()),
-  );
+  await tester.pumpWidget(testHarness(const ExperienceFormPage()));
 }
 
 Future<void> enter(WidgetTester tester, String name, String value) async {

@@ -1,6 +1,8 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:myportofolio_mobile/main.dart';
+
+import 'support/test_app.dart';
+
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
 import 'package:myportofolio_mobile/screens/experience_form.dart';
@@ -34,7 +36,7 @@ void main() {
   testWidgets('Experience card pushes a form with Back and its own SnackBar', (
     tester,
   ) async {
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(testApp());
     final home = tester.element(find.byType(MyHomePage));
     final card = find.widgetWithText(ItemCard, 'Tambah Pengalaman');
     await tester.ensureVisible(card);
@@ -54,7 +56,7 @@ void main() {
   testWidgets(
     'The shared drawer connects all three destinations and preserves an active Experience draft',
     (tester) async {
-      await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(testApp());
       for (final label in [
         'Tambah Pengalaman',
         'Tambah Proyek',
@@ -100,7 +102,7 @@ void main() {
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.resetPhysicalSize);
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(testApp());
     await openDrawer(tester);
     await chooseDestination(tester, 'Tambah Pengalaman');
     expect(find.byType(ExperienceFormPage), findsOneWidget);
@@ -113,7 +115,7 @@ void main() {
   testWidgets('Add card pushes a form; Back returns to the same Home', (
     tester,
   ) async {
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(testApp());
     final originalHome = tester.element(find.byType(MyHomePage));
     final card = find.widgetWithText(ItemCard, 'Tambah Proyek');
     await tester.ensureVisible(card);
@@ -137,7 +139,7 @@ void main() {
   testWidgets(
     'Drawer replaces root destinations without building a history stack',
     (tester) async {
-      await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(testApp());
       for (var cycle = 0; cycle < 3; cycle++) {
         await openDrawer(tester);
         expect(find.text('MyPortfolio'), findsOneWidget);
@@ -172,7 +174,7 @@ void main() {
   testWidgets(
     'Selecting the current drawer destination preserves the page and form draft',
     (tester) async {
-      await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(testApp());
       final originalHome = tester.element(find.byType(MyHomePage));
       await openDrawer(tester);
       await chooseDestination(tester, 'Home');
@@ -200,7 +202,7 @@ void main() {
   testWidgets(
     'Drawer replacement after a push preserves the earlier Home route',
     (tester) async {
-      await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(testApp());
       final originalHome = tester.element(find.byType(MyHomePage));
       final card = find.widgetWithText(ItemCard, 'Tambah Proyek');
       await tester.ensureVisible(card);
@@ -229,7 +231,7 @@ void main() {
       addTearDown(tester.view.resetDevicePixelRatio);
       addTearDown(tester.view.resetPhysicalSize);
       addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
-      await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(testApp());
       await openDrawer(tester);
       final heading = find.descendant(
         of: find.byType(LeftDrawer),

@@ -1,10 +1,13 @@
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:myportofolio_mobile/main.dart';
+
+import 'support/test_app.dart';
+
 import 'package:myportofolio_mobile/screens/menu.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
 import 'package:myportofolio_mobile/screens/experience_form.dart';
+import 'package:myportofolio_mobile/screens/project_list_screen.dart';
 import 'package:myportofolio_mobile/widgets/project_card.dart';
 import 'package:myportofolio_mobile/widgets/portfolio_sections.dart';
 
@@ -12,7 +15,7 @@ void main() {
   testWidgets('Home page displays the owner profile and welcome message', (
     WidgetTester tester,
   ) async {
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(testApp());
 
     expect(
       find.widgetWithText(AppBar, 'Muhammad Osman Fardin'),
@@ -70,7 +73,7 @@ void main() {
         addTearDown(tester.view.resetPhysicalSize);
         addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
 
-        await tester.pumpWidget(const MyApp());
+        await tester.pumpWidget(testApp());
         final welcome = find.text("Hi, I'm Fardin.");
         await tester.ensureVisible(welcome);
         await tester.pumpAndSettle();
@@ -115,7 +118,7 @@ void main() {
     'Logout',
   ]) {
     testWidgets('$name displays its own SnackBar message', (tester) async {
-      await tester.pumpWidget(const MyApp());
+      await tester.pumpWidget(testApp());
 
       final card = find.widgetWithText(ItemCard, name);
       expect(card, findsOneWidget);
@@ -127,6 +130,8 @@ void main() {
       expect(find.text('Kamu telah menekan tombol $name!'), findsOneWidget);
       if (name == 'Tambah Proyek') {
         expect(find.byType(ProjectFormPage), findsOneWidget);
+      } else if (name == 'Lihat Proyek') {
+        expect(find.byType(ProjectListScreen), findsOneWidget);
       } else if (name == 'Tambah Pengalaman') {
         expect(find.byType(ExperienceFormPage), findsOneWidget);
       } else {
@@ -139,41 +144,46 @@ void main() {
     });
   }
 
-  testWidgets('Rapid taps replace earlier messages without leaving a queue', (
+  testWidgets('Rapid card taps replace messages without a queue', (
     tester,
   ) async {
-    await tester.pumpWidget(const MyApp());
-
-    await tester.ensureVisible(find.text('Lihat Proyek'));
-    await tester.pumpAndSettle();
-
-    await tester.tap(find.text('Lihat Proyek'));
-    await tester.pump(const Duration(milliseconds: 100));
-    await tester.ensureVisible(find.text('Logout'));
-    await tester.pump();
-    await tester.tap(find.text('Logout'));
-    await tester.pump(const Duration(milliseconds: 50));
-    await tester.ensureVisible(find.text('Lihat Proyek'));
-    await tester.pump();
-    await tester.tap(find.text('Lihat Proyek'));
-    await tester.pumpAndSettle();
-
-    expect(
-      find.text('Kamu telah menekan tombol Lihat Proyek!'),
-      findsOneWidget,
+    await tester.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: Row(
+            children: [
+              SizedBox(
+                width: 180,
+                height: 160,
+                child: ItemCard(
+                  ItemHomepage('Aksi A', Icons.star, Colors.blue),
+                ),
+              ),
+              SizedBox(
+                width: 180,
+                height: 160,
+                child: ItemCard(
+                  ItemHomepage('Aksi B', Icons.star, Colors.green),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
-    expect(find.text('Kamu telah menekan tombol Logout!'), findsNothing);
-    expect(find.text('Kamu telah menekan tombol Tambah Proyek!'), findsNothing);
-    expect(find.byType(SnackBar), findsOneWidget);
-
+    await tester.tap(find.text('Aksi A'));
+    await tester.pump(const Duration(milliseconds: 100));
+    await tester.tap(find.text('Aksi B'));
+    await tester.pumpAndSettle();
+    expect(find.text('Kamu telah menekan tombol Aksi B!'), findsOneWidget);
+    expect(find.text('Kamu telah menekan tombol Aksi A!'), findsNothing);
     await tester.pump(const Duration(seconds: 5));
     await tester.pumpAndSettle();
     expect(find.byType(SnackBar), findsNothing);
-    expect(tester.takeException(), isNull);
   });
 
   testWidgets('Keyboard users can activate the first action', (tester) async {
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(testApp());
 
     await tester.sendKeyEvent(LogicalKeyboardKey.tab);
     await tester.pumpAndSettle();
@@ -201,7 +211,7 @@ void main() {
     tester.view.physicalSize = const Size(390, 844);
     addTearDown(tester.view.resetDevicePixelRatio);
     addTearDown(tester.view.resetPhysicalSize);
-    await tester.pumpWidget(const MyApp());
+    await tester.pumpWidget(testApp());
     await tester.ensureVisible(find.byType(PortfolioAbout));
     await tester.pumpAndSettle();
 

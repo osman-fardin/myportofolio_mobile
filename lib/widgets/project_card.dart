@@ -2,6 +2,8 @@ import 'package:material_ui/material_ui.dart';
 import 'package:myportofolio_mobile/screens/project_form.dart';
 import 'package:myportofolio_mobile/screens/experience_form.dart';
 import 'package:myportofolio_mobile/theme/portfolio_theme.dart';
+import 'package:myportofolio_mobile/screens/project_list_screen.dart';
+import 'package:myportofolio_mobile/widgets/auth_guard.dart';
 
 class ItemHomepage {
   const ItemHomepage(this.name, this.icon, this.color);
@@ -50,7 +52,7 @@ class ItemCard extends StatelessWidget {
         clipBehavior: Clip.antiAlias,
         child: InkWell(
           borderRadius: borderRadius,
-          onTap: () {
+          onTap: () async {
             ScaffoldMessenger.of(context)
               ..clearSnackBars()
               ..showSnackBar(
@@ -59,6 +61,7 @@ class ItemCard extends StatelessWidget {
                 ),
               );
             if (item.name == 'Tambah Proyek') {
+              if (!await ensureLoggedIn(context) || !context.mounted) return;
               Navigator.push<void>(
                 context,
                 MaterialPageRoute(builder: (_) => const ProjectFormPage()),
@@ -68,6 +71,13 @@ class ItemCard extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (_) => const ExperienceFormPage()),
               );
+            } else if (item.name == 'Lihat Proyek') {
+              Navigator.push<void>(
+                context,
+                MaterialPageRoute(builder: (_) => const ProjectListScreen()),
+              );
+            } else if (item.name == 'Logout') {
+              await logoutWithFeedback(context);
             }
           },
           child: Padding(
