@@ -32,6 +32,9 @@ class ProjectDetailScreen extends StatelessWidget {
                 if (image != null) ...[
                   Image.network(
                     image,
+                    // Public static images may not provide cross-origin canvas headers.
+                    // HTML embedding avoids broadening the backend API's CORS policy.
+                    webHtmlElementStrategy: WebHtmlElementStrategy.prefer,
                     height: 220,
                     fit: BoxFit.cover,
                     semanticLabel: 'Gambar ${project.title}',
